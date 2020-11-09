@@ -24,9 +24,7 @@ class ItemList extends StatelessWidget {
             ),
             RaisedButton(
               child: Text('Add'),
-              onPressed: () {
-                Navigator.pushNamed(context, '/add');
-              }
+              onPressed: () => Navigator.pushNamed(context, '/add'),
             )
           ],
         )

@@ -22,10 +22,7 @@ class ItemAdd extends StatelessWidget {
                           labelText: 'Item name'
                         ),
                         validator: (value) {
-                          if (value.isEmpty) {
-                            return 'Please enter some text';
-                          }
-                          return null;
+                          return (value.isEmpty)? 'Please a name' : null;
                         },
                       ),
                       Padding(
@@ -34,9 +31,7 @@ class ItemAdd extends StatelessWidget {
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
                               Scaffold.of(context).showSnackBar(
-                                  SnackBar(
-                                      content:
-                                      Text('Processing Data')));
+                                  SnackBar(content: Text('Processing Data')));
                             }
                           },
                           child: Text('Submit'),
@@ -48,9 +43,7 @@ class ItemAdd extends StatelessWidget {
             ),
             RaisedButton(
                 child: Text('Back'),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/');
-                }
+                onPressed: () => Navigator.pushNamed(context, '/'),
             )
           ],
         )
