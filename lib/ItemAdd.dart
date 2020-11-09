@@ -17,6 +17,10 @@ class ItemAdd extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       TextFormField(
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          labelText: 'Item name'
+                        ),
                         validator: (value) {
                           if (value.isEmpty) {
                             return 'Please enter some text';
