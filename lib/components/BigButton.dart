@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// This component is for full screen buttons.
+/// * It is a generic component designed for re use
+/// * We provide the text, and action for the button.
+/// * text: the label displayed on the button
+/// * action: a lambda function, the button calls when pressed.
 class BigButton extends StatelessWidget {
 
   String _text;

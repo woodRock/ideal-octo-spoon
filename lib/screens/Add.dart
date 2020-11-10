@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stock/components/BigButton.dart';
 
+/// This class adds an Item to the desired stock list.
+/// * It is a form that updates the stock context.
 class Add extends StatelessWidget {
 
   final String title = 'Add';

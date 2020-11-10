@@ -4,6 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:stock/components/BigButton.dart';
 import 'package:stock/model/Item.dart';
 
+/// This displays the list of stock to the user.
+/// * The state of each item can be adjusted on this screen.
+/// * Items can be:
+/// *   missing: not in the current stock,
+/// *   in-stock: currently available,
+/// *   essential: must be available,
+/// *   luxury: not an essential item.
 class Stock extends StatelessWidget {
 
   final String title = 'Stock';
