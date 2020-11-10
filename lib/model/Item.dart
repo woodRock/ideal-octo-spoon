@@ -5,6 +5,8 @@ class Item {
 
   String name;
 
+  /// Syntax sugar for the Item constructor.
+  /// * It takes a name as it's only parameter.
   Item(this.name);
 
   /// This method recreates an Item from a JSON string.
