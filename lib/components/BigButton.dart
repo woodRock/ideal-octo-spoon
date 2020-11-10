@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 
 class BigButton extends StatelessWidget {
 
-  String text;
-  Function action;
+  String _text;
+  Function _action;
 
-  BigButton(this.text, this.action);
+  BigButton(this._text, this._action);
+
+  String get text => this._text;
+  Function get action => this._action;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +17,8 @@ class BigButton extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            child: Text(this.text),
-            onPressed: () => this.action.call(),
+            child: Text(text),
+            onPressed: () => action.call(),
           ),
         ),
       ),

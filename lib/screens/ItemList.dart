@@ -6,9 +6,7 @@ class ItemList extends StatelessWidget {
   final String title = 'List';
   final List _items = ['Butter','Milk','Mince','Cheese'];
 
-  List getItems() {
-    return this._items;
-  }
+  List get items => this._items;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,6 @@ class ItemList extends StatelessWidget {
   }
 
   Widget getList(context) {
-    List items = getItems();
     return Column(
       children: [
         Expanded(
