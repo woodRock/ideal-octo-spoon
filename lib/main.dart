@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'screens/ItemAdd.dart';
-import 'screens/ItemList.dart';
+import 'screens/Add.dart';
+import 'screens/Stock.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,8 +16,8 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes : {
-        '/': (context) => ItemList(),
-        '/add': (context) => ItemAdd(),
+        '/': (context) => Stock(),
+        '/add': (context) => Add(),
       },
     );
   }

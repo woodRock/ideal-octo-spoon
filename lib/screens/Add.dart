@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:stock/components/BigButton.dart';
 
-class ItemAdd extends StatelessWidget {
+class Add extends StatelessWidget {
 
   final String title = 'Add';
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     return Scaffold(
         appBar: AppBar(
             title: Text(this.title)
         ),
-        body: getForm(context, _formKey),
+        body: getForm(context),
     );
   }
 
-  Widget getForm(context, _formKey) {
+  Widget getForm(context) {
     return Column(
       children: [
         Expanded(
