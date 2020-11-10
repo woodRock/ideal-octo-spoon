@@ -50,7 +50,7 @@ class ItemAdd extends StatelessWidget {
                 )
             )
         ),
-        BigButton('Back', () => Navigator.pushNamed(context, '/')),
+        BigButton('Cancel', () => Navigator.pushNamed(context, '/')),
       ],
     );
   }

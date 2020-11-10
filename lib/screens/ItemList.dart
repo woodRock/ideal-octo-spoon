@@ -8,12 +8,17 @@ class ItemList extends StatelessWidget {
 
   final String title = 'List';
   final String path = "assets/data/items.json";
+  
+  List<Item> sortAlphabetically(List<Item> items) {
+    items.sort((a,b) => a.name.compareTo(b.name));
+    return items;
+  }
 
   Future<List<Item>> getItems(BuildContext context) async {
     String jsonString = await DefaultAssetBundle.of(context).loadString(this.path);
     List<dynamic> raw = jsonDecode(jsonString);
     List<Item> items = raw.map((f) => Item.fromJSON(f)).toList();
-    return items;
+    return sortAlphabetically(items);
   }
 
   @override
