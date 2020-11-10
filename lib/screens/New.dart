@@ -3,9 +3,9 @@ import 'package:stock/components/BigButton.dart';
 
 /// This class adds an Item to the desired stock list.
 /// * It is a form that updates the stock context.
-class Add extends StatelessWidget {
+class New extends StatelessWidget {
 
-  final String title = 'Add';
+  final String title = 'New';
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -18,6 +18,9 @@ class Add extends StatelessWidget {
     );
   }
 
+  /// A form to add a New item to the stock list.
+  /// * The form does not except empty values
+  /// TODO [ ] - check for duplicate Items that have already been added in validator
   Widget getForm(context) {
     return Column(
       children: [

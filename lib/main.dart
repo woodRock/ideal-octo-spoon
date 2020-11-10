@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/Add.dart';
+import 'screens/New.dart';
 import 'screens/Stock.dart';
 
 void main() {
@@ -21,7 +21,7 @@ class App extends StatelessWidget {
       initialRoute: '/',
       routes : {
         '/': (context) => Stock(),
-        '/add': (context) => Add(),
+        '/new': (context) => New(),
       },
     );
   }
