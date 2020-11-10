@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:stock/components/BigButton.dart';
 
 class ItemAdd extends StatelessWidget {
+
+  final String title = 'Add';
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
         appBar: AppBar(
-            title: Text('Add')
+            title: Text(this.title)
         ),
-        body: getForm(context, _formKey)
+        body: getForm(context, _formKey),
     );
   }
 
@@ -46,10 +50,7 @@ class ItemAdd extends StatelessWidget {
                 )
             )
         ),
-        RaisedButton(
-          child: Text('Back'),
-          onPressed: () => Navigator.pushNamed(context, '/'),
-        )
+        BigButton('Back', () => Navigator.pushNamed(context, '/')),
       ],
     );
   }

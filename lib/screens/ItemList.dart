@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:stock/components/BigButton.dart';
 
 class ItemList extends StatelessWidget {
+
+  final String title = 'List';
+  final List _items = ['Butter','Milk','Mince','Cheese'];
+
+  List getItems() {
+    return this._items;
+  }
 
   @override
   Widget build(BuildContext context) {
     // TODO Implement context to store the items
-    List items = ['Butter','Milk','Mince','Cheese'];
     return Scaffold(
         appBar: AppBar(
-          title: Text('List')
+          title: Text(this.title)
         ),
-        body: getList(context, items)
+        body: getList(context)
     );
   }
 
-  Widget getList(context, items) {
+  Widget getList(context) {
+    List items = getItems();
     return Column(
       children: [
         Expanded(
@@ -28,10 +36,7 @@ class ItemList extends StatelessWidget {
             },
           ),
         ),
-        RaisedButton(
-          child: Text('Add'),
-          onPressed: () => Navigator.pushNamed(context, '/add'),
-        )
+        BigButton('Add', () => Navigator.pushNamed(context, '/add'))
       ],
     );
   }

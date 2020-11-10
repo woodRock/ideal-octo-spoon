@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'ItemAdd.dart';
-import 'ItemList.dart';
+import 'screens/ItemAdd.dart';
+import 'screens/ItemList.dart';
 
 void main() {
   runApp(MyApp());
