@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stock/widgets/BigButton.dart';
 import 'package:stock/model/Item.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:stock/model/ItemsModel.dart';
 
 /// This displays the list of stock to the user.
@@ -44,8 +43,8 @@ class Stock extends StatelessWidget {
       children: [
         itemList(context),
         totalCost(context),
+        BigButton('Reset', () => items.resetAll()),
         BigButton('Calculate', () => print("Calculate")),
-        BigButton('Reset', () => items.resetAll() ),
       ]
     );
   }
@@ -76,7 +75,7 @@ class Stock extends StatelessWidget {
   /// Displays the total cost of the stock
   Widget totalCost(BuildContext context) {
     return Container(
-      color: Colors.orange,
+      color: Theme.of(context).bottomAppBarColor,
       padding: const EdgeInsets.all(8.0),
       child: RichText(
         text: TextSpan(
@@ -100,7 +99,6 @@ class Stock extends StatelessWidget {
     Item item = Provider.of<ItemsModel>(context).get(index);
 
     return Dismissible(
-      // Show a red background as the item is swiped away.
       key: Key(item.name),
       direction: DismissDirection.endToStart,
       background: Container(
@@ -127,7 +125,7 @@ class Stock extends StatelessWidget {
       },
       child: ListTile(
           leading: CircleAvatar(
-            backgroundColor: item.essential? Colors.greenAccent : Colors.blueAccent,
+            backgroundColor: item.essential? Colors.purpleAccent: Theme.of(context).secondaryHeaderColor,
             child: RichText(
                 text: TextSpan(
                   style: DefaultTextStyle.of(context).style,
