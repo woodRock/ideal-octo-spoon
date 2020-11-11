@@ -1,17 +1,32 @@
 [
   {
-    "name": "Butter"
+    "name": "Butter",
+    "count": 1,
+    "essential": true,
+    "cost": 10.0
   },
   {
-    "name": "Milk"
+    "name": "Milk",
+    "count": 0,
+    "essential": false,
+    "cost": 5.0
   },
   {
-    "name": "Mince"
+    "name": "Mince",
+    "count": 2,
+    "essential": true,
+    "cost": 20.0
   },
   {
-    "name": "Cheese"
+    "name": "Cheese",
+    "count": 3,
+    "essential": false,
+    "cost": 25.0
   },
   {
-    "name": "Coffee"
+    "name": "Coffee",
+    "count": 1,
+    "essential": true,
+    "cost": 30.0
   }
 ]

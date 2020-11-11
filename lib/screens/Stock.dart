@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:stock/components/BigButton.dart';
+import 'package:provider/provider.dart';
+import 'package:stock/widgets/BigButton.dart';
 import 'package:stock/model/Item.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:stock/model/ItemsModel.dart';
 
 /// This displays the list of stock to the user.
 /// * The state of each item can be adjusted on this screen.
@@ -21,98 +24,140 @@ class Stock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(this.title)
+            automaticallyImplyLeading: false,
+            title: Text(this.title),
+            actions: <Widget>[
+              ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/new'),
+                child: Icon(Icons.add),
+              )
+            ]
         ),
-        body: getList(context)
+        body: items(context)
     );
   }
 
   /// Retrieves a list that is stored as a JSON in a local asset.
-  /// * We use a promise builder so different data sources can be substituded.
-  /// * We check if the list has been loaded, if not we display a progress circle.
-  /// * Otherwise, we display a list of slidable items based on future's snapshot.
-  Widget getList(context) {
+  Widget items(context) {
+    final ItemsModel items = Provider.of<ItemsModel>(context);
     return Column(
       children: [
-        Expanded(
-          child: FutureBuilder(
-            future: getItems(context),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      return getSlidable(snapshot.data[index]);
-                    });
-              } else {
-                return Center(child: CircularProgressIndicator());
-              }
-            },
-          )
-        ),
-        BigButton('New', () => Navigator.pushNamed(context, '/new'))
-      ],
+        itemList(context),
+        totalCost(context),
+        BigButton('Calculate', () => print("Calculate")),
+        BigButton('Reset', () => items.resetAll() ),
+      ]
+    );
+  }
+
+  /// A list of the items in the stock
+  Widget itemList(BuildContext context) {
+    final ItemsModel items = Provider.of<ItemsModel>(context);
+    return Expanded(
+      child: FutureBuilder(
+        future: getItems(context),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (items.length == 0)
+              items.set(snapshot.data);
+            return ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) => slidableItem(context, index),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
+
+  }
+
+  /// Displays the total cost of the stock
+  Widget totalCost(BuildContext context) {
+    return Container(
+      color: Colors.orange,
+      padding: const EdgeInsets.all(8.0),
+      child: RichText(
+        text: TextSpan(
+            style: Theme.of(context).textTheme.headline5,
+            children: <TextSpan>[
+              TextSpan(
+                  text: 'Total:',
+                  style: TextStyle(fontWeight: FontWeight.bold)
+              ),
+              TextSpan(
+                text: '${Provider.of<ItemsModel>(context).totalCost()}',
+              )
+            ]
+        ) ,
+      ),
     );
   }
 
   /// A slidable list item for an Item that has directional slide actions.
-  /// * item: The item to be displayed as a slidable item on a list
-  /// * Our slidable actions are primary and secondary, left -> right, right -> left.
-  /// * Primary actions are very common, e.g., clear
-  /// * Secondary actions are not common use cases, e.g., edit, delete
-  ///
-  /// TODO [ ] - Implement CRUD functionality with context.
-  /// TODO [ ] - Add a total summary at the top (or bottom) of the page.
-  Widget getSlidable(Item item) {
+  Widget slidableItem(BuildContext context, int index) {
+    Item item = Provider.of<ItemsModel>(context).get(index);
     return Slidable(
       actionExtentRatio: 0.25,
       actionPane: SlidableDrawerActionPane(),
       child: ListTile(
-        leading: Icon(Icons.food_bank),
-        title: Text('${item.name}'),
+        leading: CircleAvatar(
+          foregroundColor: Colors.white,
+          backgroundColor: item.essential? Colors.amber : Colors.greenAccent,
+          child: Text('${item.count}'),
+        ),
+        title: RichText(
+          text: TextSpan(
+            style: DefaultTextStyle.of(context).style,
+            text: '${item.name}',
+            recognizer: new TapGestureRecognizer()..onTap = () => Provider.of<ItemsModel>(context).increment(item),
+          ),
+        )
       ),
       actions: <Widget>[
-        /// Resets the count for this item.
         IconSlideAction(
             caption: 'Clear',
             color: Colors.grey,
             icon: Icons.clear,
-            onTap: () => print('Clear')
+            onTap: () => Provider.of<ItemsModel>(context).reset(item),
         )
       ],
       secondaryActions: <Widget>[
-        /// Edit the information for an item.
         IconSlideAction(
           caption: 'Edit',
           color: Colors.green,
           icon: Icons.edit,
           onTap: () => print('Edit'),
         ),
-        /// Remove an item from the list entirely.
         IconSlideAction(
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
-          onTap: () => print('Delete'),
+          onTap: () => Provider.of<ItemsModel>(context).delete(item),
         )
       ],
     );
   }
 
-  /// Sorts a list of items alphabetically by name.
-  List<Item> sortAlphabetically(List<Item> items) {
-    items.sort((a,b) => a.name.compareTo(b.name));
+  /// Sorts a list of items into display order.
+  List<Item> sortItems(List<Item> items) {
+    items.sort((a,b) =>
+        a.name.compareTo(b.name)
+    );
+    items.sort((a,b) =>
+        b.essential.toString().compareTo(a.essential.toString())
+    );
     return items;
   }
 
   /// Retrieves a list of Items stored as a JSON as a local asset.
-  /// * We must reference the asset in the pubspec.yaml.
-  /// * The Item class has a constructor that takes JSON.
   Future<List<Item>> getItems(BuildContext context) async {
     String jsonString = await DefaultAssetBundle.of(context).loadString(this.path);
+    // dynamic is the like the Any type from Typescript
     List<dynamic> raw = jsonDecode(jsonString);
     List<Item> items = raw.map((f) => Item.fromJSON(f)).toList();
-    return sortAlphabetically(items);
+    return sortItems(items);
   }
 }
 

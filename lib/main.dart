@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'model/ItemsModel.dart';
 import 'screens/New.dart';
 import 'screens/Stock.dart';
 
 void main() {
-  runApp(App());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => ItemsModel(),
+        child: App(),
+      )
+  );
 }
 
 /// The root component of the application
