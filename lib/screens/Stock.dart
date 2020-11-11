@@ -62,7 +62,7 @@ class Stock extends StatelessWidget {
               items.set(snapshot.data);
             return ListView.builder(
                 itemCount: items.length,
-                itemBuilder: (context, index) => slidableItem(context, index),
+                itemBuilder: (context, index) => listItem(context, index),
             );
           } else {
             return Center(child: CircularProgressIndicator());
@@ -95,69 +95,65 @@ class Stock extends StatelessWidget {
     );
   }
 
-  /// A slidable list item for an Item that has directional slide actions.
-  Widget slidableItem(BuildContext context, int index) {
+  /// A dismissible list item for an Item of stock
+  Widget listItem(BuildContext context, int index) {
     Item item = Provider.of<ItemsModel>(context).get(index);
-    return Slidable(
-      actionExtentRatio: 0.25,
-      actionPane: SlidableDrawerActionPane(),
-      child: ListTile(
-        leading: CircleAvatar(
-          foregroundColor: Colors.white,
-          backgroundColor: item.essential? Colors.amber : Colors.greenAccent,
-          child: Text('${item.count}'),
-        ),
-        title: RichText(
-          text: TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            text: '${item.name}',
-            recognizer: new TapGestureRecognizer()..onTap = () => Provider.of<ItemsModel>(context).increment(item),
-          ),
-        )
-      ),
-      actions: <Widget>[
-        IconSlideAction(
-            caption: 'Clear',
-            color: Colors.grey,
-            icon: Icons.clear,
-            onTap: () => Provider.of<ItemsModel>(context).reset(item),
-        )
-      ],
-      secondaryActions: <Widget>[
-        IconSlideAction(
-          caption: 'Edit',
-          color: Colors.green,
-          icon: Icons.edit,
-          onTap: () => print('Edit'),
-        ),
-        IconSlideAction(
-          caption: 'Delete',
-          color: Colors.red,
-          icon: Icons.delete,
-          onTap: () => Provider.of<ItemsModel>(context).delete(item),
-        )
-      ],
-    );
-  }
 
-  /// Sorts a list of items into display order.
-  List<Item> sortItems(List<Item> items) {
-    items.sort((a,b) =>
-        a.name.compareTo(b.name)
-    );
-    items.sort((a,b) =>
-        b.essential.toString().compareTo(a.essential.toString())
-    );
-    return items;
+    return Dismissible(
+      // Show a red background as the item is swiped away.
+      key: Key(item.name),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        color: Colors.red,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        alignment: AlignmentDirectional.centerEnd,
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+      ),
+      onDismissed: (direction) {
+        Provider.of<ItemsModel>(context).delete(item);
+        Scaffold.of(context).showSnackBar(SnackBar(
+          content: Text("${item.name} removed"),
+          duration: Duration(seconds: 5),
+          action: SnackBarAction(
+              label: "Undo",
+              textColor: Colors.yellow,
+              onPressed: () => Provider.of<ItemsModel>(context).add(item),
+            ),
+          )
+        );
+      },
+      child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: item.essential? Colors.greenAccent : Colors.blueAccent,
+            child: RichText(
+                text: TextSpan(
+                  style: DefaultTextStyle.of(context).style,
+                  text: '${item.count}',
+                  recognizer: LongPressGestureRecognizer()
+                    ..onLongPress = () => Provider.of<ItemsModel>(context).reset(item),
+                )
+            ),
+          ),
+          title: RichText(
+            text: TextSpan(
+                style: DefaultTextStyle.of(context).style,
+                text: '${item.name}',
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => Provider.of<ItemsModel>(context).increment(item),
+              )
+            ),
+        ),
+      );
   }
 
   /// Retrieves a list of Items stored as a JSON as a local asset.
   Future<List<Item>> getItems(BuildContext context) async {
     String jsonString = await DefaultAssetBundle.of(context).loadString(this.path);
-    // dynamic is the like the Any type from Typescript
     List<dynamic> raw = jsonDecode(jsonString);
-    List<Item> items = raw.map((f) => Item.fromJSON(f)).toList();
-    return sortItems(items);
+    return raw.map((f) => Item.fromJSON(f)).toList();
   }
 }
 

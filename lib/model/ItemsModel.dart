@@ -36,45 +36,56 @@ class ItemsModel extends ChangeNotifier {
   }
 
   /// Increment an item by object reference.
-  void increment(Item item) {
+  increment(Item item) {
     getByItem(item).increment();
     notifyListeners();
   }
 
   /// Reset the count of an item by object reference.
-  void reset(Item item) {
+  reset(Item item) {
     getByItem(item).reset();
     notifyListeners();
   }
 
   /// Reset the count for the entire stock.
-  void resetAll() {
+  resetAll() {
     this._items.forEach((item) => item.reset() );
     notifyListeners();
   }
 
   /// Provide a new list of items.
-  void set(List<Item> items){
+  set(List<Item> items){
     this.removeAll();
     items.forEach((item) => add(item) );
+    this.sort();
     notifyListeners();
   }
 
   /// Include an additional item to the stock.
-  void add(Item item) {
+  add(Item item) {
     this._items.add(item);
+    this.sort();
     notifyListeners();
   }
 
   /// Remove an item from the stock
-  void delete(Item i) {
+  delete(Item i) {
     this._items.remove(i);
     notifyListeners();
   }
 
   /// Clear all items from the stock.
-  void removeAll() {
+  removeAll() {
     this._items.clear();
     notifyListeners();
+  }
+
+  sort() {
+    this._items.sort((a,b) =>
+        a.name.compareTo(b.name)
+    );
+    this._items.sort((a,b) =>
+        b.essential.toString().compareTo(a.essential.toString())
+    );
   }
 }
