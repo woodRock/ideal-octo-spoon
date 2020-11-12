@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:stock/model/Item.dart';
@@ -80,6 +81,7 @@ class ItemsModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sort by priority then alphabetically by name
   sort() {
     this._items.sort((a,b) =>
         a.name.compareTo(b.name)
