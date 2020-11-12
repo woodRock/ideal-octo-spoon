@@ -7,6 +7,7 @@ import 'package:stock/model/Item.dart';
 /// This bloc stores the state of the items.
 class ItemsModel extends ChangeNotifier {
 
+  final String path = "assets/data/items.json";
   final List<Item> _items = [];
 
   UnmodifiableListView<Item> get items => UnmodifiableListView(this._items);
@@ -89,5 +90,12 @@ class ItemsModel extends ChangeNotifier {
     this._items.sort((a,b) =>
         b.essential.toString().compareTo(a.essential.toString())
     );
+  }
+
+  /// Retrieves a list of Items stored as a JSON as a local asset.
+  Future<List<Item>> getItems(BuildContext context) async {
+    String jsonString = await DefaultAssetBundle.of(context).loadString(this.path);
+    List<dynamic> raw = jsonDecode(jsonString);
+    return raw.map((f) => Item.fromJSON(f)).toList();
   }
 }

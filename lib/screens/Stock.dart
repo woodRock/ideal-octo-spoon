@@ -1,17 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stock/widgets/BigButton.dart';
 import 'package:stock/model/Item.dart';
 import 'package:stock/model/ItemsModel.dart';
+import 'package:stock/widgets/BigButton.dart';
 
 /// This displays the list of stock to the user.
 class Stock extends StatelessWidget {
 
   final String title = 'Stock';
-  final String path = "assets/data/items.json";
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +18,13 @@ class Stock extends StatelessWidget {
             title: Text(this.title),
             actions: <Widget>[
               ElevatedButton(
+                onPressed: () => Provider.of<ItemsModel>(context).resetAll(),
+                child: Icon(Icons.clear),
+              ),
+              ElevatedButton(
                 onPressed: () => Navigator.pushNamed(context, '/new'),
                 child: Icon(Icons.add),
-              )
+              ),
             ]
         ),
         body: items(context)
@@ -32,12 +33,10 @@ class Stock extends StatelessWidget {
 
   /// Retrieves a list that is stored as a JSON in a local asset.
   Widget items(context) {
-    final ItemsModel items = Provider.of<ItemsModel>(context);
     return Column(
       children: [
         itemList(context),
         totalCost(context),
-        BigButton('Reset', () => items.resetAll()),
         BigButton('Calculate', () => print("Calculate")),
       ]
     );
@@ -48,7 +47,7 @@ class Stock extends StatelessWidget {
     final ItemsModel items = Provider.of<ItemsModel>(context);
     return Expanded(
       child: FutureBuilder(
-        future: getItems(context),
+        future: items.getItems(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             if (items.length == 0)
@@ -139,13 +138,6 @@ class Stock extends StatelessWidget {
             ),
         ),
       );
-  }
-
-  /// Retrieves a list of Items stored as a JSON as a local asset.
-  Future<List<Item>> getItems(BuildContext context) async {
-    String jsonString = await DefaultAssetBundle.of(context).loadString(this.path);
-    List<dynamic> raw = jsonDecode(jsonString);
-    return raw.map((f) => Item.fromJSON(f)).toList();
   }
 }
 
