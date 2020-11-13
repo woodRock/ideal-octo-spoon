@@ -103,7 +103,7 @@ class Stock extends StatelessWidget {
       onDismissed: (direction) {
         Provider.of<ItemsModel>(context).delete(item);
         Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text('${item.name} removed'),
+          content: Text('${item.name} removed from stock'),
           duration: Duration(seconds: 5),
           action: SnackBarAction(
               label: 'Undo',
