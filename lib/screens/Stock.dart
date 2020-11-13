@@ -18,10 +18,6 @@ class Stock extends StatelessWidget {
             title: Text(this.title),
             actions: <Widget>[
               ElevatedButton(
-                onPressed: () => Provider.of<ItemsModel>(context).resetAll(),
-                child: Icon(Icons.clear),
-              ),
-              ElevatedButton(
                 onPressed: () => Navigator.pushNamed(context, '/new'),
                 child: Icon(Icons.add),
               ),
@@ -37,6 +33,7 @@ class Stock extends StatelessWidget {
       children: [
         itemList(context),
         totalCost(context),
+        BigButton('Reset', () => Provider.of<ItemsModel>(context).resetAll()),
         BigButton('Calculate', () => print("Calculate")),
       ]
     );
@@ -106,10 +103,10 @@ class Stock extends StatelessWidget {
       onDismissed: (direction) {
         Provider.of<ItemsModel>(context).delete(item);
         Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text("${item.name} removed"),
+          content: Text('${item.name} removed'),
           duration: Duration(seconds: 5),
           action: SnackBarAction(
-              label: "Undo",
+              label: 'Undo',
               textColor: Colors.yellow,
               onPressed: () => Provider.of<ItemsModel>(context).add(item),
             ),
