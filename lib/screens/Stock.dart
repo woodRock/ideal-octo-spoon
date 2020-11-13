@@ -23,12 +23,12 @@ class Stock extends StatelessWidget {
               ),
             ]
         ),
-        body: items(context)
+        body: itemsPage(context)
     );
   }
 
   /// Retrieves a list that is stored as a JSON in a local asset.
-  Widget items(context) {
+  Widget itemsPage(context) {
     return Column(
       children: [
         itemList(context),

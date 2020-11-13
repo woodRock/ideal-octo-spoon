@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 /// * We provide the text, and action for the button.
 class BigButton extends StatelessWidget {
 
-  String _text;
-  Function _action;
+  final String _text;
+  final Function _action;
 
   /// Syntax sugar for the BigButton constructor.
   /// * Each BigButton takes text and an action
