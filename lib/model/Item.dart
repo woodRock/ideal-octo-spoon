@@ -6,6 +6,10 @@ class Item {
   bool _essential;
   double _cost;
 
+  Item(this._name, this._count, this._essential, this._cost);
+
+  Item.fromFactory();
+
   /// This method recreates an Item from a JSON string.
   /// * We store our list with the asset of a JSON file.
   Item.fromJSON(Map json) {
@@ -19,6 +23,11 @@ class Item {
   int get count => this._count;
   bool get essential => this._essential;
   double get cost => this._cost;
+
+  set name(String name) => this._name = name;
+  set count(int count) => this._count = count;
+  set essential(bool essential) => this._essential = essential;
+  set cost(double cost) => this._cost = cost;
 
   /// Sets the count for this item to zero.
   reset() {

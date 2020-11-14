@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:stock/model/ItemsModel.dart';
 import 'package:stock/widgets/BigButton.dart';
+import 'package:stock/model/Item.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 /// A screen for adding a new item to the stock
@@ -36,50 +39,64 @@ class ItemForm extends StatefulWidget {
 class ItemFormState extends State<ItemForm> {
 
   final _formKey = GlobalKey<FormState>();
+  final Item _item = Item.fromFactory();
 
   @override
   Widget build(BuildContext context) {
+    final halfMediaWidth = MediaQuery.of(context).size.width / 2.0;
     return Form(
-      key: _formKey,
+      key: this._formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(child: Column(
             children: [
-              TextFormField(
-                keyboardType: TextInputType.name,
-                decoration: InputDecoration(
-                    icon: Icon(Icons.fastfood_sharp),
-                    labelText: 'Name'),
-                validator: (value) => value.isEmpty? 'Please enter the name' : null,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    icon: Icon(Icons.bar_chart),
-                    labelText: 'Count'
+              Container(
+                width: halfMediaWidth,
+                child: TextFormField(
+                  keyboardType: TextInputType.name,
+                  decoration: InputDecoration(
+                      icon: Icon(Icons.fastfood_sharp),
+                      labelText: 'Name'),
+                  validator: (value) => value.isEmpty? 'Please enter the name' : null,
+                  onSaved: (String value) => _item.name = value,
                 ),
-                validator: (value) => value.isEmpty? 'Please enter a count' : null,
               ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    icon: Icon(Icons.attach_money),
-                    labelText: 'Cost'
+              Container(
+                width: halfMediaWidth,
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      icon: Icon(Icons.bar_chart),
+                      labelText: 'Count'
+                  ),
+                  validator: (value) => value.isEmpty? 'Please enter a count' : null,
+                  onSaved: (String value) => this._item.count = int.parse(value),
                 ),
-                validator: (value) => value.isEmpty? 'Please enter the cost' : null,
               ),
-              toggle(),
+              Container(
+                width: halfMediaWidth,
+                child: TextFormField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      icon: Icon(Icons.attach_money),
+                      labelText: 'Cost'
+                  ),
+                  validator: (value) => value.isEmpty? 'Please enter the cost' : null,
+                  onSaved: (String value) => this._item.cost = double.parse(value),
+                ),
+              ),
+              toggle(this._item),
             ],
           )),
-          submit(),
+          submit(this._item),
         ],
       ),
     );
   }
 
   /// Toggle the priority for the item between need and want
-  Widget toggle(){
+  Widget toggle(Item item){
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -93,28 +110,28 @@ class ItemFormState extends State<ItemForm> {
           labels: ['Need', 'Want'],
           icons: [Icons.warning_outlined, Icons.attach_money],
           activeBgColors: [Colors.red, Colors.green],
-          onToggle: (int) => print('Switch'),
+          onToggle: (int value) => item.essential = value == 0,
         ),
       ),
     );
   }
 
   /// Submit button displayed at the bottom of the page
-  Widget submit() {
+  Widget submit(Item item) {
     return BigButton(
-        'Submit',
-            () => (_formKey.currentState.validate()) ?
-        Scaffold.of(context).showSnackBar(SnackBar(
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-            content: Text('Added to stock')
-        ))
-            :
-        Scaffold.of(context).showSnackBar(SnackBar(
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 2),
-          content: Text('Invalid Item'),
-        ))
+      'Submit',
+      () {
+        if (this._formKey.currentState.validate()) {
+          this._formKey.currentState.save();
+          Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 2),
+              content: Text('Added to stock')
+          ));
+          Provider.of<ItemsModel>(context).add(item);
+        }
+      }
     );
   }
+
 }
