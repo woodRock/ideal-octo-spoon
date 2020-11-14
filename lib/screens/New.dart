@@ -7,6 +7,8 @@ import 'package:stock/widgets/BigButton.dart';
 import 'package:stock/model/Item.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+import 'package:stock/widgets/ItemTextFormField.dart';
+
 /// A screen for adding a new item to the stock
 class New extends StatelessWidget {
 
@@ -59,6 +61,7 @@ class ItemFormState extends State<ItemForm> {
                 icon: Icons.fastfood,
                 item: this._item,
                 onSaved: (String value) => this._item.name = value,
+                context : context,
               ),
               itemTextFormField(
                 name: 'count',
@@ -66,6 +69,7 @@ class ItemFormState extends State<ItemForm> {
                 icon: Icons.bar_chart,
                 item: this._item,
                 onSaved: (String value) => this._item.count = int.parse(value),
+                context : context,
               ),
               itemTextFormField(
                 name: 'cost',
@@ -73,28 +77,13 @@ class ItemFormState extends State<ItemForm> {
                 icon: Icons.attach_money,
                 item: this._item,
                 onSaved: (String value) => this._item.cost = double.parse(value),
+                context : context,
               ),
               toggle(),
             ],
           )),
           submit(),
         ],
-      ),
-    );
-  }
-
-  /// These are used as the input fields for the item input text fields.
-  Widget itemTextFormField({String name, TextInputType textInputType, IconData icon, Item item, Function onSaved}) {
-    final halfMediaWidth = MediaQuery.of(context).size.width / 2.0;
-    return Container(
-      width: halfMediaWidth,
-      child: TextFormField(
-        keyboardType: textInputType,
-        decoration: InputDecoration(
-            icon: Icon(icon),
-            labelText: name),
-        validator: (value) => value.isEmpty? 'Please enter the $name' : null,
-        onSaved: (String value) => onSaved.call(value),
       ),
     );
   }

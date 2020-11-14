@@ -87,7 +87,6 @@ class Stock extends StatelessWidget {
   /// A dismissible list item for an Item of stock
   Widget listItem(BuildContext context, int index) {
     Item item = Provider.of<ItemsModel>(context).get(index);
-
     return Dismissible(
       key: Key(item.name),
       direction: DismissDirection.endToStart,
