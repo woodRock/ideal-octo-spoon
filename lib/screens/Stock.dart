@@ -8,14 +8,14 @@ import 'package:stock/widgets/BigButton.dart';
 /// This displays the list of stock to the user.
 class Stock extends StatelessWidget {
 
-  final String title = 'Stock';
+  final String _title = 'Stock';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Text(this.title),
+            title: Text(this._title),
             actions: <Widget>[
               ElevatedButton(
                 onPressed: () => Navigator.pushNamed(context, '/new'),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stock/model/ItemsModel.dart';
@@ -29,6 +31,7 @@ class New extends StatelessWidget {
 
 /// Returns the state for the item form.
 class ItemForm extends StatefulWidget {
+
   @override
   ItemFormState createState() {
     return ItemFormState();
@@ -43,7 +46,6 @@ class ItemFormState extends State<ItemForm> {
 
   @override
   Widget build(BuildContext context) {
-    final halfMediaWidth = MediaQuery.of(context).size.width / 2.0;
     return Form(
       key: this._formKey,
       child: Column(
@@ -51,52 +53,54 @@ class ItemFormState extends State<ItemForm> {
         children: <Widget>[
           Expanded(child: Column(
             children: [
-              Container(
-                width: halfMediaWidth,
-                child: TextFormField(
-                  keyboardType: TextInputType.name,
-                  decoration: InputDecoration(
-                      icon: Icon(Icons.fastfood_sharp),
-                      labelText: 'Name'),
-                  validator: (value) => value.isEmpty? 'Please enter the name' : null,
-                  onSaved: (String value) => _item.name = value,
-                ),
+              itemTextFormField(
+                name: 'name',
+                textInputType: TextInputType.name,
+                icon: Icons.fastfood,
+                item: this._item,
+                onSaved: (String value) => this._item.name = value,
               ),
-              Container(
-                width: halfMediaWidth,
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      icon: Icon(Icons.bar_chart),
-                      labelText: 'Count'
-                  ),
-                  validator: (value) => value.isEmpty? 'Please enter a count' : null,
-                  onSaved: (String value) => this._item.count = int.parse(value),
-                ),
+              itemTextFormField(
+                name: 'count',
+                textInputType: TextInputType.number,
+                icon: Icons.bar_chart,
+                item: this._item,
+                onSaved: (String value) => this._item.count = int.parse(value),
               ),
-              Container(
-                width: halfMediaWidth,
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      icon: Icon(Icons.attach_money),
-                      labelText: 'Cost'
-                  ),
-                  validator: (value) => value.isEmpty? 'Please enter the cost' : null,
-                  onSaved: (String value) => this._item.cost = double.parse(value),
-                ),
+              itemTextFormField(
+                name: 'cost',
+                textInputType: TextInputType.number,
+                icon: Icons.attach_money,
+                item: this._item,
+                onSaved: (String value) => this._item.cost = double.parse(value),
               ),
-              toggle(this._item),
+              toggle(),
             ],
           )),
-          submit(this._item),
+          submit(),
         ],
       ),
     );
   }
 
+  Widget itemTextFormField({String name, TextInputType textInputType, IconData icon, Item item, Function onSaved}) {
+    final halfMediaWidth = MediaQuery.of(context).size.width / 2.0;
+    return Container(
+      width: halfMediaWidth,
+      child: TextFormField(
+        keyboardType: textInputType,
+        decoration: InputDecoration(
+            icon: Icon(icon),
+            labelText: name),
+        validator: (value) => value.isEmpty? 'Please enter the $name' : null,
+        onSaved: (String value) => onSaved.call(value),
+      ),
+    );
+  }
+
   /// Toggle the priority for the item between need and want
-  Widget toggle(Item item){
+  Widget toggle(){
+    this._item.essential = true;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
@@ -110,25 +114,27 @@ class ItemFormState extends State<ItemForm> {
           labels: ['Need', 'Want'],
           icons: [Icons.warning_outlined, Icons.attach_money],
           activeBgColors: [Colors.red, Colors.green],
-          onToggle: (int value) => item.essential = value == 0,
+          onToggle: (int value) => this._item.essential = value == 0,
         ),
       ),
     );
   }
 
   /// Submit button displayed at the bottom of the page
-  Widget submit(Item item) {
+  Widget submit() {
     return BigButton(
       'Submit',
       () {
         if (this._formKey.currentState.validate()) {
           this._formKey.currentState.save();
+          int delay = 2;
+          Provider.of<ItemsModel>(context).add(this._item);
           Scaffold.of(context).showSnackBar(SnackBar(
               backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
+              duration: Duration(seconds: delay),
               content: Text('Added to stock')
           ));
-          Provider.of<ItemsModel>(context).add(item);
+          Timer(Duration(seconds: delay), () => Navigator.pushNamed(context, '/'));
         }
       }
     );
