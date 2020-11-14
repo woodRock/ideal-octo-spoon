@@ -8,7 +8,11 @@ class Item {
 
   Item(this._name, this._count, this._essential, this._cost);
 
-  Item.fromFactory();
+  /// This constructor is used for the New item form.
+  /// Default state for an item is essential.
+  Item.fromFactory(){
+    this._essential = true;
+  }
 
   /// This method recreates an Item from a JSON string.
   /// * We store our list with the asset of a JSON file.
