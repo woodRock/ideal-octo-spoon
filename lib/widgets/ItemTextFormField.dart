@@ -3,7 +3,6 @@ import 'package:stock/model/Item.dart';
 
 /// These are used as the input fields for the item input text fields.
 class ItemTextFormField extends StatelessWidget {
-
   final String name;
   final TextInputType textInputType;
   final IconData icon;
@@ -11,7 +10,8 @@ class ItemTextFormField extends StatelessWidget {
   final Function onSaved;
   final BuildContext context;
 
-  ItemTextFormField(this.name, this.textInputType, this.icon, this.item, this.onSaved, this.context);
+  ItemTextFormField(this.name, this.textInputType, this.icon, this.item,
+      this.onSaved, this.context);
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,10 @@ class ItemTextFormField extends StatelessWidget {
       width: halfMediaWidth,
       child: TextFormField(
         keyboardType: textInputType,
-        decoration: InputDecoration(
-            icon: Icon(icon),
-            labelText: name),
-        validator: (value) => value.isEmpty? 'Please enter the $name' : null,
+        decoration: InputDecoration(icon: Icon(icon), labelText: name),
+        validator: (value) => value.isEmpty ? 'Please enter the $name' : null,
         onSaved: (String value) => onSaved.call(value),
       ),
     );
   }
-
 }

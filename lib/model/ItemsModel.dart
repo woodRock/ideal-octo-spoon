@@ -51,7 +51,7 @@ class ItemsModel extends ChangeNotifier {
 
   /// Reset the count for the entire stock.
   resetAll() {
-    this._items.forEach((item) => item.reset() );
+    this._items.forEach((item) => item.reset());
     notifyListeners();
   }
 

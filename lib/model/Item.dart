@@ -1,6 +1,5 @@
 /// This class captures the notion of an Item.
 class Item {
-
   String _name;
   int _count;
   bool _essential;
@@ -10,7 +9,7 @@ class Item {
 
   /// This constructor is used for the New item form.
   /// Default state for an item is essential.
-  Item.fromFactory(){
+  Item.fromFactory() {
     this._essential = true;
   }
 
@@ -24,13 +23,19 @@ class Item {
   }
 
   String get name => this._name;
+
   int get count => this._count;
+
   bool get essential => this._essential;
+
   double get cost => this._cost;
 
   set name(String name) => this._name = name;
+
   set count(int count) => this._count = count;
+
   set essential(bool essential) => this._essential = essential;
+
   set cost(double cost) => this._cost = cost;
 
   /// Sets the count for this item to zero.
@@ -47,5 +52,4 @@ class Item {
   double totalCost() {
     return this._cost * this._count;
   }
-
 }

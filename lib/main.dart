@@ -6,12 +6,10 @@ import 'screens/New.dart';
 import 'screens/Stock.dart';
 
 void main() {
-  runApp(
-      ChangeNotifierProvider(
-        create: (context) => ItemsModel(),
-        child: App(),
-      )
-  );
+  runApp(ChangeNotifierProvider(
+    create: (context) => ItemsModel(),
+    child: App(),
+  ));
 }
 
 /// The root component of the application
@@ -27,13 +25,10 @@ class App extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: '/',
-      routes : {
+      routes: {
         '/': (context) => Stock(),
         '/new': (context) => New(),
       },
     );
   }
 }
-
-
-

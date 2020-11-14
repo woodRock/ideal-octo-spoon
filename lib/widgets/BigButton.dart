@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 /// * It is a generic component designed for re-use
 /// * We provide the text, and action for the button.
 class BigButton extends StatelessWidget {
-
   final String _text;
   final Function _action;
 
@@ -15,6 +14,7 @@ class BigButton extends StatelessWidget {
   BigButton(this._text, this._action);
 
   String get text => this._text;
+
   Function get action => this._action;
 
   @override

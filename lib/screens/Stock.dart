@@ -7,7 +7,6 @@ import 'package:stock/widgets/BigButton.dart';
 
 /// This displays the list of stock to the user.
 class Stock extends StatelessWidget {
-
   final String _title = 'Stock';
 
   @override
@@ -21,22 +20,18 @@ class Stock extends StatelessWidget {
                 onPressed: () => Navigator.pushNamed(context, '/new'),
                 child: Icon(Icons.add),
               ),
-            ]
-        ),
-        body: itemsPage(context)
-    );
+            ]),
+        body: itemsPage(context));
   }
 
   /// Retrieves a list that is stored as a JSON in a local asset.
   Widget itemsPage(context) {
-    return Column(
-      children: [
-        itemList(context),
-        totalCost(context),
-        BigButton('Reset', () => Provider.of<ItemsModel>(context).resetAll()),
-        BigButton('Calculate', () => print("Calculate")),
-      ]
-    );
+    return Column(children: [
+      itemList(context),
+      totalCost(context),
+      BigButton('Reset', () => Provider.of<ItemsModel>(context).resetAll()),
+      BigButton('Calculate', () => print("Calculate")),
+    ]);
   }
 
   /// A list of the items in the stock
@@ -47,11 +42,10 @@ class Stock extends StatelessWidget {
         future: items.getItems(context),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (items.length == 0)
-              items.set(snapshot.data);
+            if (items.length == 0) items.set(snapshot.data);
             return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) => listItem(context, index),
+              itemCount: items.length,
+              itemBuilder: (context, index) => listItem(context, index),
             );
           } else {
             return Center(child: CircularProgressIndicator());
@@ -59,7 +53,6 @@ class Stock extends StatelessWidget {
         },
       ),
     );
-
   }
 
   /// Displays the total cost of the stock
@@ -73,13 +66,11 @@ class Stock extends StatelessWidget {
             children: <TextSpan>[
               TextSpan(
                   text: 'Total:',
-                  style: TextStyle(fontWeight: FontWeight.bold)
-              ),
+                  style: TextStyle(fontWeight: FontWeight.bold)),
               TextSpan(
                 text: '${Provider.of<ItemsModel>(context).totalCost()}',
               )
-            ]
-        ) ,
+            ]),
       ),
     );
   }
@@ -105,37 +96,34 @@ class Stock extends StatelessWidget {
           content: Text('${item.name} removed from stock'),
           duration: Duration(seconds: 5),
           action: SnackBarAction(
-              label: 'Undo',
-              textColor: Colors.yellow,
-              onPressed: () => Provider.of<ItemsModel>(context).add(item),
-            ),
-          )
-        );
+            label: 'Undo',
+            textColor: Colors.yellow,
+            onPressed: () => Provider.of<ItemsModel>(context).add(item),
+          ),
+        ));
       },
       child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: item.essential? Colors.purpleAccent: Theme.of(context).secondaryHeaderColor,
-            child: RichText(
-                text: TextSpan(
-                  style: DefaultTextStyle.of(context).style,
-                  text: '${item.count}',
-                  recognizer: LongPressGestureRecognizer()
-                    ..onLongPress = () => Provider.of<ItemsModel>(context).reset(item),
-                )
-            ),
-          ),
-          title: RichText(
-            text: TextSpan(
-                style: DefaultTextStyle.of(context).style,
-                text: '${item.name}',
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () => Provider.of<ItemsModel>(context).increment(item),
-              )
-            ),
+        leading: CircleAvatar(
+          backgroundColor: item.essential
+              ? Colors.purpleAccent
+              : Theme.of(context).secondaryHeaderColor,
+          child: RichText(
+              text: TextSpan(
+            style: DefaultTextStyle.of(context).style,
+            text: '${item.count}',
+            recognizer: LongPressGestureRecognizer()
+              ..onLongPress =
+                  () => Provider.of<ItemsModel>(context).reset(item),
+          )),
         ),
-      );
+        title: RichText(
+            text: TextSpan(
+          style: DefaultTextStyle.of(context).style,
+          text: '${item.name}',
+          recognizer: TapGestureRecognizer()
+            ..onTap = () => Provider.of<ItemsModel>(context).increment(item),
+        )),
+      ),
+    );
   }
 }
-
-
-
