@@ -83,6 +83,7 @@ class ItemFormState extends State<ItemForm> {
     );
   }
 
+  /// These are used as the input fields for the item input text fields.
   Widget itemTextFormField({String name, TextInputType textInputType, IconData icon, Item item, Function onSaved}) {
     final halfMediaWidth = MediaQuery.of(context).size.width / 2.0;
     return Container(
