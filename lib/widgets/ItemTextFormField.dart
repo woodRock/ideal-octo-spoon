@@ -21,9 +21,30 @@ class ItemTextFormField extends StatelessWidget {
       child: TextFormField(
         keyboardType: textInputType,
         decoration: InputDecoration(icon: Icon(icon), labelText: name),
-        validator: (value) => value.isEmpty ? 'Please enter the $name' : null,
+        validator: (value) => validator(value),
         onSaved: (String value) => onSaved.call(value),
       ),
     );
+  }
+
+  /// Wrapper method to select the validator.
+  dynamic validator(String value) {
+    if (this.textInputType == TextInputType.number)
+      return numericValidator(value);
+    return emptyValidator(value);
+  }
+
+  /// Validator to check if a string is numeric.
+  dynamic numericValidator(String value) =>
+      isNumeric(value) ? null : '$name must be a number';
+
+  /// Validator to check for an empty string.
+  dynamic emptyValidator(String value) =>
+      value.isEmpty ? 'Please enter the $name' : null;
+
+  /// Returns true if string is numeric, false otherwise.
+  bool isNumeric(String s) {
+    if (s == null) return false;
+    return double.tryParse(s) != null;
   }
 }
