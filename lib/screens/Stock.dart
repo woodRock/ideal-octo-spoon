@@ -18,9 +18,11 @@ class Stock extends StatelessWidget {
             title: Text(this._title),
             actions: <Widget>[
               ElevatedButton(
-                onPressed: () => Clipboard.setData(ClipboardData(
-                    text: Provider.of<ItemsModel>(context).toList())),
-                child: Icon(Icons.save_alt),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(
+                      text: Provider.of<ItemsModel>(context).toList()));
+                },
+                child: Icon(Icons.share),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pushNamed(context, '/new'),
@@ -99,7 +101,7 @@ class Stock extends StatelessWidget {
         Provider.of<ItemsModel>(context).delete(item);
         Scaffold.of(context).showSnackBar(SnackBar(
           content: Text('${item.name} removed from stock'),
-          duration: Duration(seconds: 5),
+          duration: Duration(seconds: 2),
           action: SnackBarAction(
             label: 'Undo',
             textColor: Colors.yellow,
