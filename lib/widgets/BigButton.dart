@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 
 /// This component is for full screen buttons.
-/// * It is a generic component designed for re-use
-/// * We provide the text, and action for the button.
 class BigButton extends StatelessWidget {
-  final String _text;
-  final Function _action;
+  final String _label;
+  final Function _function;
 
   /// Syntax sugar for the BigButton constructor.
-  /// * Each BigButton takes text and an action
-  /// * text: the label displayed on the button
-  /// * action: a lambda function, the button calls when pressed.
-  BigButton(this._text, this._action);
+  BigButton(this._label, this._function);
 
-  String get text => this._text;
+  /// Get the label for this button.
+  String get label => this._label;
 
-  Function get action => this._action;
+  /// Get the function for this button
+  Function get function => this._function;
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +21,8 @@ class BigButton extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            child: Text(text),
-            onPressed: () => action.call(),
+            child: Text(this.label),
+            onPressed: () => this.function.call(),
           ),
         ),
       ),

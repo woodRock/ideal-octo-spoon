@@ -1,15 +1,19 @@
 import 'dart:collection';
-import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:stock/model/Item.dart';
+import 'package:stock/model/StockStorage.dart';
 
 /// This bloc stores the state of the items.
 class ItemsModel extends ChangeNotifier {
-
-  final String path = "assets/data/items.json";
+  StockStorage storage;
   final List<Item> _items = [];
 
+  ItemsModel() {
+    this.storage = StockStorage();
+  }
+
+  /// Returns an unmodifiable list of items for public use.
   UnmodifiableListView<Item> get items => UnmodifiableListView(this._items);
 
   int get length => this._items.length;
@@ -56,17 +60,17 @@ class ItemsModel extends ChangeNotifier {
   }
 
   /// Provide a new list of items.
-  set(List<Item> items){
+  set(List<Item> items) {
     this.removeAll();
-    items.forEach((item) => add(item) );
-    this.sort();
+    items.forEach((item) => add(item));
+    this._sort();
     notifyListeners();
   }
 
   /// Include an additional item to the stock.
   add(Item item) {
     this._items.add(item);
-    this.sort();
+    this._sort();
     notifyListeners();
   }
 
@@ -83,19 +87,25 @@ class ItemsModel extends ChangeNotifier {
   }
 
   /// Sort by priority then alphabetically by name
-  sort() {
-    this._items.sort((a,b) =>
-        a.name.compareTo(b.name)
-    );
-    this._items.sort((a,b) =>
-        b.essential.toString().compareTo(a.essential.toString())
-    );
+  _sort() {
+    this._items.sort((a, b) => a.name.compareTo(b.name));
+    this._items.sort(
+        (a, b) => b.essential.toString().compareTo(a.essential.toString()));
   }
 
-  /// Retrieves a list of Items stored as a JSON as a local asset.
-  Future<List<Item>> getItems(BuildContext context) async {
-    String jsonString = await DefaultAssetBundle.of(context).loadString(this.path);
-    List<dynamic> raw = jsonDecode(jsonString);
-    return raw.map((f) => Item.fromJSON(f)).toList();
+  /// Saves the items in the current stock to local storage.
+  void save() {
+    this.storage.writeStock(this.items);
+  }
+
+  /// Retrieves a list of Items stored as a JSON in local storage.
+  Future<List<Item>> load() async {
+    return this.storage.readStock();
+  }
+
+  /// Loads the stock from local storage and sets it to the current stock.
+  void loadAll() async {
+    List<Item> items = await load();
+    set(items);
   }
 }

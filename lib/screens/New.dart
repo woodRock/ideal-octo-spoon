@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:stock/model/Item.dart';
 import 'package:stock/model/ItemsModel.dart';
 import 'package:stock/widgets/BigButton.dart';
-import 'package:stock/model/Item.dart';
 import 'package:stock/widgets/ItemTextFormField.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 /// A screen for adding a new item to the stock
 class New extends StatelessWidget {
@@ -39,11 +39,17 @@ class ItemFormState extends State<ItemForm> {
   final _formKey = GlobalKey<FormState>();
   final Item _item = Item.fromFactory();
 
+  /// Sets the name for item.
   setName(String value) => this._item.name = value;
 
+  /// Set the count for the item.
   setCount(String value) => this._item.count = int.parse(value);
 
+  /// Set the cost for the item.
   setCost(String value) => this._item.cost = double.parse(value);
+
+  /// Set the necessity of an item.
+  setEssential(int value) => this._item.essential = value == 0;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +109,7 @@ class ItemFormState extends State<ItemForm> {
           labels: ['Need', 'Want'],
           icons: [Icons.warning_outlined, Icons.attach_money],
           activeBgColors: [Colors.red, Colors.green],
-          onToggle: (int value) => this._item.essential = value == 0,
+          onToggle: (value) => setEssential(value),
         ),
       ),
     );

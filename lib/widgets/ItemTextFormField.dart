@@ -10,6 +10,7 @@ class ItemTextFormField extends StatelessWidget {
   final Function onSaved;
   final BuildContext context;
 
+  /// Constructor for the ItemTextFormField.
   ItemTextFormField(this.name, this.textInputType, this.icon, this.item,
       this.onSaved, this.context);
 

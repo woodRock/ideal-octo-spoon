@@ -22,6 +22,13 @@ class Item {
     this._cost = json['cost'];
   }
 
+  Map toJson() => {
+        'name': this.name,
+        'count': this.count,
+        'essential': this.essential,
+        'cost': this._cost
+      };
+
   String get name => this._name;
 
   int get count => this._count;

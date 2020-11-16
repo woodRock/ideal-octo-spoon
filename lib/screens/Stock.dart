@@ -29,8 +29,8 @@ class Stock extends StatelessWidget {
     return Column(children: [
       itemList(context),
       totalCost(context),
-      BigButton('Reset', () => Provider.of<ItemsModel>(context).resetAll()),
-      BigButton('Calculate', () => print("Calculate")),
+      BigButton('Load', () => Provider.of<ItemsModel>(context).loadAll()),
+      BigButton('Save', () => Provider.of<ItemsModel>(context).save()),
     ]);
   }
 
@@ -39,10 +39,9 @@ class Stock extends StatelessWidget {
     final ItemsModel items = Provider.of<ItemsModel>(context);
     return Expanded(
       child: FutureBuilder(
-        future: items.getItems(context),
+        future: items.load(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (items.length == 0) items.set(snapshot.data);
             return ListView.builder(
               itemCount: items.length,
               itemBuilder: (context, index) => listItem(context, index),
