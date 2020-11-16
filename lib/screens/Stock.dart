@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stock/model/Item.dart';
 import 'package:stock/model/ItemsModel.dart';
@@ -16,6 +17,11 @@ class Stock extends StatelessWidget {
             automaticallyImplyLeading: false,
             title: Text(this._title),
             actions: <Widget>[
+              ElevatedButton(
+                onPressed: () => Clipboard.setData(ClipboardData(
+                    text: Provider.of<ItemsModel>(context).toList())),
+                child: Icon(Icons.save_alt),
+              ),
               ElevatedButton(
                 onPressed: () => Navigator.pushNamed(context, '/new'),
                 child: Icon(Icons.add),

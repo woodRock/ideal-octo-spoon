@@ -114,4 +114,14 @@ class ItemsModel extends ChangeNotifier {
     List<Item> items = await load();
     set(items);
   }
+
+  String toList() {
+    String res = '';
+    this.items.forEach((item) {
+      res += '- ${item.name}';
+      res += item.count != 1 ? ' x${item.count}' : '';
+      res += '\n';
+    });
+    return res;
+  }
 }
