@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:stock/model/Item.dart';
@@ -38,7 +39,12 @@ class ItemsModel extends ChangeNotifier {
   double totalCost() {
     double sum = 0;
     this._items.forEach((e) => sum += e.totalCost());
-    return sum;
+    return roundDouble(sum, 2);
+  }
+
+  double roundDouble(double value, int places) {
+    double mod = pow(10.0, places);
+    return ((value * mod).round().toDouble() / mod);
   }
 
   /// Increment an item by object reference.

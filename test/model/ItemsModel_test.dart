@@ -57,4 +57,15 @@ void main() {
       expect(first.count, equals(0));
     });
   });
+
+  group('FileIO', () {
+    test('should be able to save and load an item', () async {
+      final items = ItemsModel();
+      items.add(testItem);
+      items.save();
+      items.removeAll();
+      expect(items.length, equals(0));
+      // TODO  work out how to test async functions properly
+    });
+  });
 }
