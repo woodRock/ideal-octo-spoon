@@ -6,6 +6,9 @@ void main() {
   Item testItem = Item.fromJSON(
       {"name": "Milk", "count": 1, "essential": false, "cost": 5.0});
 
+  Item itemWithCount = Item.fromJSON(
+      {"name": "Milk", "count": 2, "essential": false, "cost": 5.0});
+
   group('initial ItemModel', () {
     test('should start with no items', () {
       final items = ItemsModel();
@@ -66,6 +69,34 @@ void main() {
       items.removeAll();
       expect(items.length, equals(0));
       // TODO  work out how to test async functions properly
+    });
+  });
+
+  group('toList', () {
+    test('should return empty string for an empty stock', () {
+      final items = ItemsModel();
+      expect(items.toList(), equals(''));
+    });
+
+    test('should return a list containing one item', () {
+      final items = ItemsModel();
+      items.add(testItem);
+      expect(items.toList(), equals('- ${testItem.name}\n'));
+    });
+
+    test('should display the count if larger than 1', () {
+      final items = ItemsModel();
+      items.add(itemWithCount);
+      expect(items.toList(),
+          equals('- ${itemWithCount.name} x${itemWithCount.count}\n'));
+    });
+
+    test('should display each item on a new line', () {
+      final items = ItemsModel();
+      items.add(testItem);
+      items.add(testItem);
+      expect(
+          items.toList(), equals('- ${testItem.name}\n- ${testItem.name}\n'));
     });
   });
 }

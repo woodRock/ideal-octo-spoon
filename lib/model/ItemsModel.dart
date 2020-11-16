@@ -115,6 +115,7 @@ class ItemsModel extends ChangeNotifier {
     set(items);
   }
 
+  /// Returns the stock as a list with count for each item in markdown format.
   String toList() {
     String res = '';
     this.items.forEach((item) {
