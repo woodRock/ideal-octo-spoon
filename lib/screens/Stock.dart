@@ -8,6 +8,9 @@ import 'package:stock/widgets/BigButton.dart';
 
 /// This displays the list of stock to the user.
 class Stock extends StatelessWidget {
+  // [ ] TODO add an edit button for each item on press and hold or slide left
+  // [ ] TODO send the item to be edited through the Navigation function
+
   final String _title = 'Stock';
 
   @override

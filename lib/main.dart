@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stock/screens/Edit.dart';
 
 import 'model/ItemsModel.dart';
 import 'screens/New.dart';
@@ -28,6 +29,7 @@ class App extends StatelessWidget {
       routes: {
         '/': (context) => Stock(),
         '/new': (context) => New(),
+        '/edit': (context) => Edit(),
       },
     );
   }
