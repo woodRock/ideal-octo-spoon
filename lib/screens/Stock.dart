@@ -4,13 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stock/model/Item.dart';
 import 'package:stock/model/ItemsModel.dart';
+import 'package:stock/screens/Edit.dart';
 import 'package:stock/widgets/BigButton.dart';
 
 /// This displays the list of stock to the user.
 class Stock extends StatelessWidget {
-  // [ ] TODO add an edit button for each item on press and hold or slide left
-  // [ ] TODO send the item to be edited through the Navigation function
-
   final String _title = 'Stock';
 
   @override
@@ -90,8 +88,16 @@ class Stock extends StatelessWidget {
     Item item = Provider.of<ItemsModel>(context).get(index);
     return Dismissible(
       key: Key(item.name),
-      direction: DismissDirection.endToStart,
       background: Container(
+        color: Colors.green,
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        alignment: AlignmentDirectional.centerStart,
+        child: Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
+      ),
+      secondaryBackground: Container(
         color: Colors.red,
         padding: EdgeInsets.symmetric(horizontal: 20),
         alignment: AlignmentDirectional.centerEnd,
@@ -101,16 +107,33 @@ class Stock extends StatelessWidget {
         ),
       ),
       onDismissed: (direction) {
-        Provider.of<ItemsModel>(context).delete(item);
-        Scaffold.of(context).showSnackBar(SnackBar(
-          content: Text('${item.name} removed from stock'),
-          duration: Duration(seconds: 2),
-          action: SnackBarAction(
-            label: 'Undo',
-            textColor: Colors.yellow,
-            onPressed: () => Provider.of<ItemsModel>(context).add(item),
-          ),
-        ));
+        switch (direction) {
+          case DismissDirection.startToEnd:
+            {
+              Item ref = item;
+              Provider.of<ItemsModel>(context).delete(item);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Edit(ref)));
+            }
+            break;
+          case DismissDirection.endToStart:
+            {
+              Provider.of<ItemsModel>(context).delete(item);
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text('${item.name} removed from stock'),
+                duration: Duration(seconds: 2),
+                action: SnackBarAction(
+                  label: 'Undo',
+                  textColor: Colors.yellow,
+                  onPressed: () => Provider.of<ItemsModel>(context).add(item),
+                ),
+              ));
+            }
+            break;
+          default:
+            {}
+            break;
+        }
       },
       child: ListTile(
         leading: CircleAvatar(

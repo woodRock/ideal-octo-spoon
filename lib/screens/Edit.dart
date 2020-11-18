@@ -8,38 +8,61 @@ import 'package:stock/widgets/BigButton.dart';
 import 'package:stock/widgets/ItemTextFormField.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+// TODO [ ] - Refactor a generic form class.
+// TODO       This extracts duplicate code from the New and Edit screens.
+
 /// A screen for adding a new item to the stock
 class Edit extends StatelessWidget {
-  // [ ] TODO make this widget receive an item from the router
-
   final String _title = 'Edit';
+  final Item _item;
+
+  /// Creates a form to edit an existing item from the stock.
+  /// * _item: the item to be edited, which fills initial values.
+  Edit(this._item);
 
   @override
   Widget build(BuildContext context) {
+    ItemForm itemForm = ItemForm(this._item, this._item);
     return Scaffold(
       appBar: AppBar(title: Text(this._title), actions: <Widget>[
         ElevatedButton(
-          onPressed: () => Navigator.pushNamed(context, '/'),
+          onPressed: () {
+            // The item original item must be added back to the stock.
+            // As it is removed by the dismissible in opening this screen.
+            Provider.of<ItemsModel>(context).add(itemForm.original);
+            Navigator.pushNamed(context, '/');
+          },
           child: Icon(Icons.cancel),
         ),
       ]),
-      body: ItemForm(),
+      body: itemForm,
     );
   }
 }
 
 /// Returns the state for the item form.
 class ItemForm extends StatefulWidget {
+  final Item _item;
+  final Item _original;
+
+  /// Pass the item twice to make a copy for book keeping.
+  ItemForm(this._item, this._original);
+
+  /// Returns the initial state of the item without any changes.
+  Item get original => this._original;
+
   @override
   ItemFormState createState() {
-    return ItemFormState();
+    return ItemFormState(this._item);
   }
 }
 
 /// The implementation for the item form, it requires the state defined above.
 class ItemFormState extends State<ItemForm> {
   final _formKey = GlobalKey<FormState>();
-  final Item _item = Item.fromFactory();
+  final Item _item;
+
+  ItemFormState(this._item);
 
   /// Sets the name for item.
   setName(String value) => this._item.name = value;
@@ -70,6 +93,7 @@ class ItemFormState extends State<ItemForm> {
                 this._item,
                 (value) => setName(value),
                 context,
+                initial: this._item.name,
               ),
               ItemTextFormField(
                 'count',
@@ -78,6 +102,7 @@ class ItemFormState extends State<ItemForm> {
                 this._item,
                 (value) => setCount(value),
                 context,
+                initial: this._item.count.toString(),
               ),
               ItemTextFormField(
                 'cost',
@@ -86,6 +111,7 @@ class ItemFormState extends State<ItemForm> {
                 this._item,
                 (value) => setCost(value),
                 context,
+                initial: this._item.cost.toString(),
               ),
               toggle(),
             ],

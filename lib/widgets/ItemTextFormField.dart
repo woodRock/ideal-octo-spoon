@@ -9,10 +9,12 @@ class ItemTextFormField extends StatelessWidget {
   final Item item;
   final Function onSaved;
   final BuildContext context;
+  final String initial;
 
   /// Constructor for the ItemTextFormField.
   ItemTextFormField(this.name, this.textInputType, this.icon, this.item,
-      this.onSaved, this.context);
+      this.onSaved, this.context,
+      {this.initial});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class ItemTextFormField extends StatelessWidget {
         decoration: InputDecoration(icon: Icon(icon), labelText: name),
         validator: (value) => validator(value),
         onSaved: (String value) => onSaved.call(value),
+        initialValue: this.initial != null ? this.initial : '',
       ),
     );
   }

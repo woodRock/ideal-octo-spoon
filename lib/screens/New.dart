@@ -8,6 +8,9 @@ import 'package:stock/widgets/BigButton.dart';
 import 'package:stock/widgets/ItemTextFormField.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
+// TODO [ ] - Refactor a generic form class.
+// TODO       This extracts duplicate code from the New and Edit screens.
+
 /// A screen for adding a new item to the stock
 class New extends StatelessWidget {
   final String _title = 'New';
