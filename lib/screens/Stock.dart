@@ -43,26 +43,6 @@ class Stock extends StatelessWidget {
     ]);
   }
 
-  /// A list of the items in the stock
-  Widget itemList(BuildContext context) {
-    final ItemsModel items = Provider.of<ItemsModel>(context);
-    return Expanded(
-      child: FutureBuilder(
-        future: items.load(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) => listItem(context, index),
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
-      ),
-    );
-  }
-
   /// Displays the total cost of the stock
   Widget totalCost(BuildContext context) {
     return Container(
@@ -79,6 +59,26 @@ class Stock extends StatelessWidget {
                 text: '${Provider.of<ItemsModel>(context).totalCost()}',
               )
             ]),
+      ),
+    );
+  }
+
+  /// A list of the items in the stock
+  Widget itemList(BuildContext context) {
+    final ItemsModel items = Provider.of<ItemsModel>(context);
+    return Expanded(
+      child: FutureBuilder(
+        future: items.load(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) => listItem(context, index),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }
@@ -131,7 +131,6 @@ class Stock extends StatelessWidget {
             }
             break;
           default:
-            {}
             break;
         }
       },

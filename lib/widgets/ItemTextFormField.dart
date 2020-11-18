@@ -24,7 +24,7 @@ class ItemTextFormField extends StatelessWidget {
       child: TextFormField(
         keyboardType: textInputType,
         decoration: InputDecoration(icon: Icon(icon), labelText: name),
-        validator: (value) => validator(value),
+        validator: (value) => _validator(value),
         onSaved: (String value) => onSaved.call(value),
         initialValue: this.initial != null ? this.initial : '',
       ),
@@ -32,7 +32,7 @@ class ItemTextFormField extends StatelessWidget {
   }
 
   /// Wrapper method to select the validator.
-  dynamic validator(String value) {
+  dynamic _validator(String value) {
     if (this.textInputType == TextInputType.number)
       return numericValidator(value);
     return emptyValidator(value);

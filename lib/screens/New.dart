@@ -42,18 +42,6 @@ class ItemFormState extends State<ItemForm> {
   final _formKey = GlobalKey<FormState>();
   final Item _item = Item.fromFactory();
 
-  /// Sets the name for item.
-  setName(String value) => this._item.name = value;
-
-  /// Set the count for the item.
-  setCount(String value) => this._item.count = int.parse(value);
-
-  /// Set the cost for the item.
-  setCost(String value) => this._item.cost = double.parse(value);
-
-  /// Set the necessity of an item.
-  setEssential(int value) => this._item.essential = value == 0;
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -69,7 +57,7 @@ class ItemFormState extends State<ItemForm> {
                 TextInputType.name,
                 Icons.fastfood,
                 this._item,
-                (value) => setName(value),
+                (value) => _setName(value),
                 context,
               ),
               ItemTextFormField(
@@ -77,7 +65,7 @@ class ItemFormState extends State<ItemForm> {
                 TextInputType.number,
                 Icons.bar_chart,
                 this._item,
-                (value) => setCount(value),
+                (value) => _setCount(value),
                 context,
               ),
               ItemTextFormField(
@@ -85,7 +73,7 @@ class ItemFormState extends State<ItemForm> {
                 TextInputType.number,
                 Icons.attach_money,
                 this._item,
-                (value) => setCost(value),
+                (value) => _setCost(value),
                 context,
               ),
               toggle(),
@@ -112,7 +100,7 @@ class ItemFormState extends State<ItemForm> {
           labels: ['Need', 'Want'],
           icons: [Icons.warning_outlined, Icons.attach_money],
           activeBgColors: [Colors.red, Colors.green],
-          onToggle: (value) => setEssential(value),
+          onToggle: (value) => _setEssential(value),
         ),
       ),
     );
@@ -130,4 +118,16 @@ class ItemFormState extends State<ItemForm> {
         content: Text('Added to stock')));
     Timer(Duration(seconds: delay), () => Navigator.pushNamed(context, '/'));
   }
+
+  /// Sets the name for item.
+  _setName(String value) => this._item.name = value;
+
+  /// Set the count for the item.
+  _setCount(String value) => this._item.count = int.parse(value);
+
+  /// Set the cost for the item.
+  _setCost(String value) => this._item.cost = double.parse(value);
+
+  /// Set the necessity of an item.
+  _setEssential(int value) => this._item.essential = value == 0;
 }

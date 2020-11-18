@@ -8,12 +8,6 @@ class BigButton extends StatelessWidget {
   /// Syntax sugar for the BigButton constructor.
   BigButton(this._label, this._function);
 
-  /// Get the label for this button.
-  String get label => this._label;
-
-  /// Get the function for this button
-  Function get function => this._function;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,4 +22,10 @@ class BigButton extends StatelessWidget {
       ),
     );
   }
+
+  /// Get the label for this button.
+  String get label => this._label;
+
+  /// Get the function for this button
+  Function get function => this._function;
 }
