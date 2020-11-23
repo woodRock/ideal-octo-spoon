@@ -73,22 +73,24 @@ void main() {
   });
 
   group('toList', () {
-    test('should return empty string for an empty stock', () {
+    String header = '${ItemsModel.dateToday()}\n---\n';
+
+    test('should return just the header with an empty stock.', () {
       final items = ItemsModel();
-      expect(items.toList(), equals(''));
+      expect(items.toList(), equals(header));
     });
 
     test('should return a list containing one item', () {
       final items = ItemsModel();
       items.add(testItem());
-      expect(items.toList(), equals('- ${testItem().name}\n'));
+      expect(items.toList(), equals('$header- ${testItem().name}\n'));
     });
 
     test('should display the count if larger than 1', () {
       final items = ItemsModel();
       items.add(itemWithCount);
       expect(items.toList(),
-          equals('- ${itemWithCount.name} x${itemWithCount.count}\n'));
+          equals('$header- ${itemWithCount.name} x${itemWithCount.count}\n'));
     });
 
     test('should display each item on a new line', () {
@@ -96,7 +98,7 @@ void main() {
       items.add(testItem());
       items.add(testItem());
       expect(items.toList(),
-          equals('- ${testItem().name}\n- ${testItem().name}\n'));
+          equals('$header- ${testItem().name}\n- ${testItem().name}\n'));
     });
   });
 }

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:stock/model/Item.dart';
 import 'package:stock/model/StockStorage.dart';
 
@@ -117,12 +118,13 @@ class ItemsModel extends ChangeNotifier {
 
   /// Returns the stock as a list with count for each item in markdown format.
   String toList() {
-    String res = '';
-    this.items.forEach((item) {
-      res += '- ${item.name}';
-      res += item.count != 1 ? ' x${item.count}' : '';
-      res += '\n';
-    });
+    String res = '${dateToday()}\n---\n';
+    this.items.forEach((item) => res += item.toString());
     return res;
+  }
+
+  /// Returns the current date in the ISO date standard.
+  static String dateToday() {
+    return new DateFormat('yyyy-MM-dd').format(new DateTime.now());
   }
 }

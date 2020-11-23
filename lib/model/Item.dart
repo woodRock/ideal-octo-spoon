@@ -29,6 +29,30 @@ class Item {
         'cost': this._cost
       };
 
+  /// Sets the count for this item to zero.
+  reset() {
+    this._count = 0;
+  }
+
+  /// Increases the count for this item by one.
+  increment() {
+    this._count++;
+  }
+
+  /// Calculates the cost for the quantity of this item.
+  double totalCost() {
+    return this._cost * this._count;
+  }
+
+  /// List friendly string representation of an item.
+  String toString() {
+    String res = '';
+    res += '- ${this._name}';
+    res += this._count != 1 ? ' x${this._count}' : '';
+    res += '\n';
+    return res;
+  }
+
   String get name => this._name;
 
   int get count => this._count;
@@ -44,19 +68,4 @@ class Item {
   set essential(bool essential) => this._essential = essential;
 
   set cost(double cost) => this._cost = cost;
-
-  /// Sets the count for this item to zero.
-  reset() {
-    this._count = 0;
-  }
-
-  /// Increases the count for this item by one.
-  increment() {
-    this._count++;
-  }
-
-  /// Calculates the cost for the quantity of this item.
-  double totalCost() {
-    return this._cost * this._count;
-  }
 }
