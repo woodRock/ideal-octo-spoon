@@ -16,6 +16,7 @@ class Stock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            // Don't display a back arrow on the home screen.
             automaticallyImplyLeading: false,
             title: Text(this._title),
             actions: <Widget>[
