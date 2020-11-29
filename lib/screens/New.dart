@@ -12,80 +12,87 @@ import 'package:toggle_switch/toggle_switch.dart';
 // TODO       This extracts duplicate code from the New and Edit screens.
 
 /// A screen for adding a new item to the stock
-class New extends StatelessWidget {
-  final String _title = 'New';
-
+class New extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(this._title), actions: <Widget>[
-        ElevatedButton(
-          onPressed: () => Navigator.pushNamed(context, '/'),
-          child: Icon(Icons.cancel),
-        ),
-      ]),
-      body: ItemForm(),
-    );
-  }
-}
-
-/// Returns the state for the item form.
-class ItemForm extends StatefulWidget {
-  @override
-  ItemFormState createState() {
-    return ItemFormState();
+  _NewState createState() {
+    return _NewState();
   }
 }
 
 /// The implementation for the item form, it requires the state defined above.
-class ItemFormState extends State<ItemForm> {
+class _NewState extends State<New> {
+  final String _title = 'New';
   final _formKey = GlobalKey<FormState>();
   final Item _item = Item.fromFactory();
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(this._title),
+          actions: <Widget>[cancelButton(context)]),
+      body: itemForm(context),
+    );
+  }
+
+  /// Returns to the stock list and discards the changes.
+  Widget cancelButton(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => Navigator.pushNamed(context, '/'),
+      child: Icon(Icons.cancel),
+    );
+  }
+
+  /// THis form is used to add a new item to the stock.
+  Widget itemForm(BuildContext context) {
     return Form(
       key: this._formKey,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-              child: Column(
-            children: [
-              ItemTextFormField(
-                'name',
-                TextInputType.name,
-                Icons.fastfood,
-                this._item,
-                (value) => _setName(value),
-                context,
-              ),
-              ItemTextFormField(
-                'count',
-                TextInputType.number,
-                Icons.bar_chart,
-                this._item,
-                (value) => _setCount(value),
-                context,
-              ),
-              ItemTextFormField(
-                'cost',
-                TextInputType.number,
-                Icons.attach_money,
-                this._item,
-                (value) => _setCost(value),
-                context,
-              ),
-              toggle(),
-            ],
-          )),
+          Expanded(child: input()),
           BigButton('Submit', () => submit()),
         ],
       ),
     );
   }
 
-  /// Toggle the priority for the item between need and want
+  /// The user input fields for a new item. Centered in the middle of the screen.
+  Widget input() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ItemTextFormField(
+          'name',
+          TextInputType.name,
+          Icons.fastfood,
+          this._item,
+          (value) => _setName(value),
+          context,
+        ),
+        ItemTextFormField(
+          'count',
+          TextInputType.number,
+          Icons.bar_chart,
+          this._item,
+          (value) => _setCount(value),
+          context,
+        ),
+        ItemTextFormField(
+          'cost',
+          TextInputType.number,
+          Icons.attach_money,
+          this._item,
+          (value) => _setCost(value),
+          context,
+        ),
+        toggle(),
+      ],
+    );
+  }
+
+  /// Toggle the priority for the item between need and want.
   Widget toggle() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -106,7 +113,7 @@ class ItemFormState extends State<ItemForm> {
     );
   }
 
-  /// Submit the current item from the form if its valid
+  /// Submit the current item from the form if its valid.
   void submit() {
     if (!this._formKey.currentState.validate()) return;
     this._formKey.currentState.save();
@@ -119,15 +126,11 @@ class ItemFormState extends State<ItemForm> {
     Timer(Duration(seconds: delay), () => Navigator.pushNamed(context, '/'));
   }
 
-  /// Sets the name for item.
   _setName(String value) => this._item.name = value;
 
-  /// Set the count for the item.
   _setCount(String value) => this._item.count = int.parse(value);
 
-  /// Set the cost for the item.
   _setCost(String value) => this._item.cost = double.parse(value);
 
-  /// Set the necessity of an item.
   _setEssential(int value) => this._item.essential = value == 0;
 }

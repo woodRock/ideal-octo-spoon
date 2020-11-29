@@ -75,13 +75,13 @@ class _SettingsState extends State<Settings> {
       this._toString(Provider.of<ThemeModel>(context).theme);
 
   /// Converts a string to a color value.
-  _toColor(String color) {
+  _toColor(String name) {
     final Map stringToColors = {
       "blue": Colors.blue,
       "purple": Colors.purple,
       "red": Colors.red
     };
-    return stringToColors[color];
+    return stringToColors[name];
   }
 
   /// Converts a colour to a string for its name.

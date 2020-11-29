@@ -13,29 +13,36 @@ class Stock extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            // Don't display a back arrow on the home screen.
             automaticallyImplyLeading: false,
             title: Text(this._title),
-            actions: <Widget>[
-              ElevatedButton(
-                onPressed: () => Clipboard.setData(ClipboardData(
-                    text: Provider.of<ItemsModel>(context).toList())),
-                child: Icon(Icons.share),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/new'),
-                child: Icon(Icons.add),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.pushNamed(context, '/settings'),
-                child: Icon(Icons.settings),
-              ),
-            ]),
+            actions: actions(context)),
         body: itemsPage(context));
   }
 
-  /// Retrieves a list that is stored as a JSON in a local asset.
-  Widget itemsPage(context) {
+  /// The following are actions for the stock page AppBar:
+  /// * share: copies the list to the clipboard.
+  /// * new: adds a new item the stock.
+  /// * settings: navigates to the settings page.
+  List<Widget> actions(BuildContext context) {
+    return [
+      ElevatedButton(
+        onPressed: () => Clipboard.setData(
+            ClipboardData(text: Provider.of<ItemsModel>(context).toList())),
+        child: Icon(Icons.share),
+      ),
+      ElevatedButton(
+        onPressed: () => Navigator.pushNamed(context, '/new'),
+        child: Icon(Icons.add),
+      ),
+      ElevatedButton(
+        onPressed: () => Navigator.pushNamed(context, '/settings'),
+        child: Icon(Icons.settings),
+      ),
+    ];
+  }
+
+  /// The content for the widget (everything accept the AppBar).
+  Widget itemsPage(BuildContext context) {
     return Column(children: [
       itemList(context),
       totalCost(context),
@@ -44,7 +51,26 @@ class Stock extends StatelessWidget {
     ]);
   }
 
-  /// Displays the total cost of the stock
+  /// A list of the items in the stock.
+  Widget itemList(BuildContext context) {
+    final ItemsModel items = Provider.of<ItemsModel>(context);
+    return Expanded(
+      child: FutureBuilder(
+        future: items.load(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) => ListItem(index),
+            );
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+
+  /// Displays the total cost of the stock.
   Widget totalCost(BuildContext context) {
     return Container(
       color: Theme.of(context).bottomAppBarColor,
@@ -60,25 +86,6 @@ class Stock extends StatelessWidget {
                 text: '${Provider.of<ItemsModel>(context).totalCost()}',
               )
             ]),
-      ),
-    );
-  }
-
-  /// A list of the items in the stock
-  Widget itemList(BuildContext context) {
-    final ItemsModel items = Provider.of<ItemsModel>(context);
-    return Expanded(
-      child: FutureBuilder(
-        future: items.load(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) => ListItem(index),
-            );
-          }
-          return Center(child: CircularProgressIndicator());
-        },
       ),
     );
   }

@@ -12,8 +12,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 // TODO       This extracts duplicate code from the New and Edit screens.
 
 /// A screen for adding a new item to the stock
-class Edit extends StatelessWidget {
-  final String _title = 'Edit';
+class Edit extends StatefulWidget {
   final Item _item;
 
   /// Creates a form to edit an existing item from the stock.
@@ -21,51 +20,40 @@ class Edit extends StatelessWidget {
   Edit(this._item);
 
   @override
+  _EditState createState() {
+    return _EditState(this._item, this._item);
+  }
+}
+
+/// The implementation for the item form, it requires the state defined above.
+class _EditState extends State<Edit> {
+  final String _title = 'Edit';
+  final _formKey = GlobalKey<FormState>();
+  final Item _item;
+  final Item _original;
+
+  /// Pass the item twice to make a copy for book keeping.
+  _EditState(this._item, this._original);
+
+  @override
   Widget build(BuildContext context) {
-    ItemForm itemForm = ItemForm(this._item, this._item);
     return Scaffold(
       appBar: AppBar(title: Text(this._title), actions: <Widget>[
         ElevatedButton(
           onPressed: () {
             // The item original item must be added back to the stock.
             // As it is removed by the dismissible in opening this screen.
-            Provider.of<ItemsModel>(context).add(itemForm.original);
+            Provider.of<ItemsModel>(context).add(this._original);
             Navigator.pushNamed(context, '/');
           },
           child: Icon(Icons.cancel),
         ),
       ]),
-      body: itemForm,
+      body: form(context, this._item),
     );
   }
-}
 
-/// Returns the state for the item form.
-class ItemForm extends StatefulWidget {
-  final Item _item;
-  final Item _original;
-
-  /// Pass the item twice to make a copy for book keeping.
-  ItemForm(this._item, this._original);
-
-  /// Returns the initial state of the item without any changes.
-  Item get original => this._original;
-
-  @override
-  ItemFormState createState() {
-    return ItemFormState(this._item);
-  }
-}
-
-/// The implementation for the item form, it requires the state defined above.
-class ItemFormState extends State<ItemForm> {
-  final _formKey = GlobalKey<FormState>();
-  final Item _item;
-
-  ItemFormState(this._item);
-
-  @override
-  Widget build(BuildContext context) {
+  Widget form(BuildContext context, Item item) {
     return Form(
       key: this._formKey,
       child: Column(
