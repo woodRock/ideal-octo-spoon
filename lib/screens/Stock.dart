@@ -1,12 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:stock/model/Item.dart';
 import 'package:stock/model/ItemsModel.dart';
-import 'package:stock/model/ThemeModel.dart';
-import 'package:stock/screens/Edit.dart';
 import 'package:stock/widgets/BigButton.dart';
+import 'package:stock/widgets/ListItem.dart';
 
 /// This displays the list of stock to the user.
 class Stock extends StatelessWidget {
@@ -77,85 +74,11 @@ class Stock extends StatelessWidget {
           if (snapshot.hasData) {
             return ListView.builder(
               itemCount: items.length,
-              itemBuilder: (context, index) => listItem(context, index),
+              itemBuilder: (context, index) => ListItem(index),
             );
           }
           return Center(child: CircularProgressIndicator());
         },
-      ),
-    );
-  }
-
-  /// A dismissible list item for an Item of stock
-  Widget listItem(BuildContext context, int index) {
-    Item item = Provider.of<ItemsModel>(context).get(index);
-    return Dismissible(
-      key: Key(item.name),
-      background: Container(
-        color: Colors.green,
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        alignment: AlignmentDirectional.centerStart,
-        child: Icon(
-          Icons.edit,
-          color: Colors.white,
-        ),
-      ),
-      secondaryBackground: Container(
-        color: Colors.red,
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        alignment: AlignmentDirectional.centerEnd,
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-        ),
-      ),
-      onDismissed: (direction) {
-        switch (direction) {
-          case DismissDirection.startToEnd:
-            {
-              Item ref = item;
-              Provider.of<ItemsModel>(context).delete(item);
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Edit(ref)));
-            }
-            break;
-          case DismissDirection.endToStart:
-            {
-              Provider.of<ItemsModel>(context).delete(item);
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('${item.name} removed from stock'),
-                duration: Duration(seconds: 2),
-                action: SnackBarAction(
-                  label: 'Undo',
-                  textColor: Colors.yellow,
-                  onPressed: () => Provider.of<ItemsModel>(context).add(item),
-                ),
-              ));
-            }
-            break;
-          default:
-            break;
-        }
-      },
-      child: ListTile(
-        leading: CircleAvatar(
-            backgroundColor: item.essential
-                ? Provider.of<ThemeModel>(context).theme
-                : Theme.of(context).secondaryHeaderColor,
-            child: RichText(
-                text: TextSpan(
-                    style: DefaultTextStyle.of(context).style,
-                    text: '${item.count}',
-                    recognizer: LongPressGestureRecognizer()
-                      ..onLongPress =
-                          () => Provider.of<ItemsModel>(context).reset(item)))),
-        title: RichText(
-            text: TextSpan(
-          style: DefaultTextStyle.of(context).style,
-          text: '${item.name}',
-          recognizer: TapGestureRecognizer()
-            ..onTap = () => Provider.of<ItemsModel>(context).increment(item),
-        )),
       ),
     );
   }
