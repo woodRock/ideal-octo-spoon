@@ -9,7 +9,7 @@ import 'package:stock/widgets/ItemTextFormField.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 // TODO [ ] - Refactor a generic form class.
-// TODO       This extracts duplicate code from the New and Edit screens.
+// TODO This extracts duplicate code from the New and Edit screens.
 
 /// A screen for adding a new item to the stock
 class Edit extends StatefulWidget {
@@ -53,49 +53,57 @@ class _EditState extends State<Edit> {
     );
   }
 
+  /// The form for editing an item.
   Widget form(BuildContext context, Item item) {
     return Form(
       key: this._formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Expanded(
-              child: Column(
-            children: [
-              ItemTextFormField(
-                'name',
-                TextInputType.name,
-                Icons.fastfood,
-                this._item,
-                (value) => _setName(value),
-                context,
-                initial: this._item.name,
-              ),
-              ItemTextFormField(
-                'count',
-                TextInputType.number,
-                Icons.bar_chart,
-                this._item,
-                (value) => _setCount(value),
-                context,
-                initial: this._item.count.toString(),
-              ),
-              ItemTextFormField(
-                'cost',
-                TextInputType.number,
-                Icons.attach_money,
-                this._item,
-                (value) => _setCost(value),
-                context,
-                initial: this._item.cost.toString(),
-              ),
-              toggle(),
-            ],
-          )),
+          input(),
           BigButton('Submit', () => submit()),
         ],
       ),
     );
+  }
+
+  /// The user input fields for editing an item. Centered in the middle of the screen.
+  Widget input() {
+    return Expanded(
+        child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ItemTextFormField(
+          'name',
+          TextInputType.name,
+          Icons.fastfood,
+          this._item,
+          (value) => _setName(value),
+          context,
+          initial: this._item.name,
+        ),
+        ItemTextFormField(
+          'count',
+          TextInputType.number,
+          Icons.bar_chart,
+          this._item,
+          (value) => _setCount(value),
+          context,
+          initial: this._item.count.toString(),
+        ),
+        ItemTextFormField(
+          'cost',
+          TextInputType.number,
+          Icons.attach_money,
+          this._item,
+          (value) => _setCost(value),
+          context,
+          initial: this._item.cost.toString(),
+        ),
+        toggle(),
+      ],
+    ));
   }
 
   /// Toggle the priority for the item between need and want
@@ -110,7 +118,7 @@ class _EditState extends State<Edit> {
           activeFgColor: Colors.white,
           inactiveBgColor: Colors.grey,
           inactiveFgColor: Colors.white,
-          labels: ['Need', 'Want'],
+          labels: Item.labels,
           icons: [Icons.warning_outlined, Icons.attach_money],
           activeBgColors: [Colors.red, Colors.green],
           onToggle: (value) => _setEssential(value),
@@ -123,7 +131,7 @@ class _EditState extends State<Edit> {
   void submit() {
     if (!this._formKey.currentState.validate()) return;
     this._formKey.currentState.save();
-    int delay = 2;
+    final int delay = 2;
     Provider.of<ItemsModel>(context).add(this._item);
     Scaffold.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.green,

@@ -5,7 +5,6 @@ class BigButton extends StatelessWidget {
   final String _label;
   final Function _function;
 
-  /// Syntax sugar for the BigButton constructor.
   BigButton(this._label, this._function);
 
   @override

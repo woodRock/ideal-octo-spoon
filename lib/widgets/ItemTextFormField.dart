@@ -11,7 +11,7 @@ class ItemTextFormField extends StatelessWidget {
   final BuildContext context;
   final String initial;
 
-  /// Constructor for the ItemTextFormField.
+  /// Constructor for the ItemTextFormField. An initial value is optional.
   ItemTextFormField(this.name, this.textInputType, this.icon, this.item,
       this.onSaved, this.context,
       {this.initial});

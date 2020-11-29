@@ -44,13 +44,13 @@ class _NewState extends State<New> {
     );
   }
 
-  /// THis form is used to add a new item to the stock.
+  /// This form is used to add a new item to the stock.
   Widget itemForm(BuildContext context) {
     return Form(
       key: this._formKey,
       child: Column(
         children: <Widget>[
-          Expanded(child: input()),
+          input(),
           BigButton('Submit', () => submit()),
         ],
       ),
@@ -59,36 +59,38 @@ class _NewState extends State<New> {
 
   /// The user input fields for a new item. Centered in the middle of the screen.
   Widget input() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        ItemTextFormField(
-          'name',
-          TextInputType.name,
-          Icons.fastfood,
-          this._item,
-          (value) => _setName(value),
-          context,
-        ),
-        ItemTextFormField(
-          'count',
-          TextInputType.number,
-          Icons.bar_chart,
-          this._item,
-          (value) => _setCount(value),
-          context,
-        ),
-        ItemTextFormField(
-          'cost',
-          TextInputType.number,
-          Icons.attach_money,
-          this._item,
-          (value) => _setCost(value),
-          context,
-        ),
-        toggle(),
-      ],
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ItemTextFormField(
+            'name',
+            TextInputType.name,
+            Icons.fastfood,
+            this._item,
+            (value) => _setName(value),
+            context,
+          ),
+          ItemTextFormField(
+            'count',
+            TextInputType.number,
+            Icons.bar_chart,
+            this._item,
+            (value) => _setCount(value),
+            context,
+          ),
+          ItemTextFormField(
+            'cost',
+            TextInputType.number,
+            Icons.attach_money,
+            this._item,
+            (value) => _setCost(value),
+            context,
+          ),
+          toggle(),
+        ],
+      ),
     );
   }
 
@@ -104,7 +106,7 @@ class _NewState extends State<New> {
           activeFgColor: Colors.white,
           inactiveBgColor: Colors.grey,
           inactiveFgColor: Colors.white,
-          labels: ['Need', 'Want'],
+          labels: Item.labels,
           icons: [Icons.warning_outlined, Icons.attach_money],
           activeBgColors: [Colors.red, Colors.green],
           onToggle: (value) => _setEssential(value),
@@ -117,7 +119,7 @@ class _NewState extends State<New> {
   void submit() {
     if (!this._formKey.currentState.validate()) return;
     this._formKey.currentState.save();
-    int delay = 2;
+    final int delay = 2;
     Provider.of<ItemsModel>(context).add(this._item);
     Scaffold.of(context).showSnackBar(SnackBar(
         backgroundColor: Colors.green,

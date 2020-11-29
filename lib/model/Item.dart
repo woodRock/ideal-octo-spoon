@@ -68,4 +68,6 @@ class Item {
   set essential(bool essential) => this._essential = essential;
 
   set cost(double cost) => this._cost = cost;
+
+  static final List<String> labels = ['Want', 'Need'];
 }
