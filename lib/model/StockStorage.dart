@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'Item.dart';
 
+/// Uses the phones storage to make the stock lists persistent.
 class StockStorage {
   Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();

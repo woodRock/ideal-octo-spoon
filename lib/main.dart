@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:stock/model/ItemsModel.dart';
+import 'package:stock/model/ThemeModel.dart';
+import 'package:stock/screens/Settings.dart';
 
-import 'model/ItemsModel.dart';
 import 'screens/New.dart';
 import 'screens/Stock.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => ItemsModel(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => ItemsModel()),
+      ChangeNotifierProvider(create: (_) => ThemeModel()),
+    ],
     child: App(),
   ));
 }
@@ -21,13 +26,14 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Provider.of<ThemeModel>(context).theme,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       initialRoute: '/',
       routes: {
         '/': (context) => Stock(),
         '/new': (context) => New(),
+        '/settings': (context) => Settings(),
       },
     );
   }

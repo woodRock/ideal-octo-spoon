@@ -29,6 +29,10 @@ class Stock extends StatelessWidget {
                 onPressed: () => Navigator.pushNamed(context, '/new'),
                 child: Icon(Icons.add),
               ),
+              ElevatedButton(
+                onPressed: () => Navigator.pushNamed(context, '/settings'),
+                child: Icon(Icons.settings),
+              ),
             ]),
         body: itemsPage(context));
   }
