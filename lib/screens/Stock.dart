@@ -20,10 +20,8 @@ class Stock extends StatelessWidget {
             title: Text(this._title),
             actions: <Widget>[
               ElevatedButton(
-                onPressed: () {
-                  Clipboard.setData(ClipboardData(
-                      text: Provider.of<ItemsModel>(context).toList()));
-                },
+                onPressed: () => Clipboard.setData(ClipboardData(
+                    text: Provider.of<ItemsModel>(context).toList())),
                 child: Icon(Icons.share),
               ),
               ElevatedButton(
@@ -80,9 +78,8 @@ class Stock extends StatelessWidget {
               itemCount: items.length,
               itemBuilder: (context, index) => listItem(context, index),
             );
-          } else {
-            return Center(child: CircularProgressIndicator());
           }
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -141,18 +138,16 @@ class Stock extends StatelessWidget {
       },
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: item.essential
-              ? Provider.of<ThemeModel>(context).theme
-              : Theme.of(context).secondaryHeaderColor,
-          child: RichText(
-              text: TextSpan(
-            style: DefaultTextStyle.of(context).style,
-            text: '${item.count}',
-            recognizer: LongPressGestureRecognizer()
-              ..onLongPress =
-                  () => Provider.of<ItemsModel>(context).reset(item),
-          )),
-        ),
+            backgroundColor: item.essential
+                ? Provider.of<ThemeModel>(context).theme
+                : Theme.of(context).secondaryHeaderColor,
+            child: RichText(
+                text: TextSpan(
+                    style: DefaultTextStyle.of(context).style,
+                    text: '${item.count}',
+                    recognizer: LongPressGestureRecognizer()
+                      ..onLongPress =
+                          () => Provider.of<ItemsModel>(context).reset(item)))),
         title: RichText(
             text: TextSpan(
           style: DefaultTextStyle.of(context).style,
