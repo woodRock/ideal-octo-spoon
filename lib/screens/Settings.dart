@@ -23,6 +23,7 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    this._currentColor = this._themeColor;
     return Scaffold(
       appBar: AppBar(title: Text(this._title)),
       body: Container(
@@ -69,13 +70,27 @@ class _SettingsState extends State<Settings> {
     });
   }
 
+  /// Retrieve the current theme color from the context bloc.
+  String get _themeColor =>
+      this._toString(Provider.of<ThemeModel>(context).theme);
+
   /// Converts a string to a color value.
   _toColor(String color) {
-    Map stringToColors = {
+    final Map stringToColors = {
       "blue": Colors.blue,
       "purple": Colors.purple,
       "red": Colors.red
     };
     return stringToColors[color];
+  }
+
+  /// Converts a colour to a string for its name.
+  _toString(Color color) {
+    final Map colorToString = {
+      Colors.blue: "blue",
+      Colors.purple: "purple",
+      Colors.red: "red"
+    };
+    return colorToString[color];
   }
 }
