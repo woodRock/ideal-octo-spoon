@@ -70,11 +70,11 @@ class _SettingsState extends State<Settings> {
   }
 
   /// Converts a string to a color value.
-  Color _toColor(String color) {
+  _toColor(String color) {
     Map stringToColors = {
-      "red": Colors.red,
       "blue": Colors.blue,
-      "purple": Colors.purple
+      "purple": Colors.purple,
+      "red": Colors.red
     };
     return stringToColors[color];
   }

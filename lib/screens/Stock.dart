@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:stock/model/Item.dart';
 import 'package:stock/model/ItemsModel.dart';
+import 'package:stock/model/ThemeModel.dart';
 import 'package:stock/screens/Edit.dart';
 import 'package:stock/widgets/BigButton.dart';
 
@@ -141,7 +142,7 @@ class Stock extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: item.essential
-              ? Colors.purpleAccent
+              ? Provider.of<ThemeModel>(context).theme
               : Theme.of(context).secondaryHeaderColor,
           child: RichText(
               text: TextSpan(
