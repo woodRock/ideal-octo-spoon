@@ -38,19 +38,20 @@ class _EditState extends State<Edit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(this._title), actions: <Widget>[
-        ElevatedButton(
-          onPressed: () {
-            // The item original item must be added back to the stock.
-            // As it is removed by the dismissible in opening this screen.
-            Provider.of<ItemsModel>(context).add(this._original);
-            Navigator.pushNamed(context, '/');
-          },
-          child: Icon(Icons.cancel),
-        ),
-      ]),
-      body: form(context, this._item),
-    );
+        appBar: AppBar(title: Text(this._title), actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              // The item original item must be added back to the stock.
+              // As it is removed by the dismissible in opening this screen.
+              Provider.of<ItemsModel>(context).add(this._original);
+              Navigator.pushNamed(context, '/');
+            },
+            child: Icon(Icons.cancel),
+          ),
+        ]),
+        body: Builder(builder: (BuildContext context) {
+          return form(context, this._item);
+        }));
   }
 
   /// The form for editing an item.

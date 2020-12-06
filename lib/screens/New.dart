@@ -32,7 +32,9 @@ class _NewState extends State<New> {
           automaticallyImplyLeading: false,
           title: Text(this._title),
           actions: <Widget>[cancelButton(context)]),
-      body: itemForm(context),
+      body: Builder(builder: (BuildContext context) {
+        return itemForm(context);
+      }),
     );
   }
 
@@ -51,7 +53,7 @@ class _NewState extends State<New> {
       child: Column(
         children: <Widget>[
           input(),
-          BigButton('Submit', () => submit()),
+          BigButton('Submit', () => submit(context)),
         ],
       ),
     );
@@ -116,7 +118,8 @@ class _NewState extends State<New> {
   }
 
   /// Submit the current item from the form if its valid.
-  void submit() {
+  void submit(BuildContext context) {
+    print('I get here!');
     if (!this._formKey.currentState.validate()) return;
     this._formKey.currentState.save();
     final int delay = 2;
