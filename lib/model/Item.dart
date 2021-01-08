@@ -69,5 +69,5 @@ class Item {
 
   set cost(double cost) => this._cost = cost;
 
-  static final List<String> labels = ['Want', 'Need'];
+  static final List<String> labels = ['Need', 'Want'];
 }
