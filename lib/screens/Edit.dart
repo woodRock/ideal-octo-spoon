@@ -38,17 +38,20 @@ class _EditState extends State<Edit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(this._title), actions: <Widget>[
-          ElevatedButton(
-            onPressed: () {
-              // The item original item must be added back to the stock.
-              // As it is removed by the dismissible in opening this screen.
-              Provider.of<ItemsModel>(context).add(this._original);
-              Navigator.pushNamed(context, '/');
-            },
-            child: Icon(Icons.cancel),
-          ),
-        ]),
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: Text(this._title),
+            actions: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  // The item original item must be added back to the stock.
+                  // As it is removed by the dismissible in opening this screen.
+                  Provider.of<ItemsModel>(context).add(this._original);
+                  Navigator.pushNamed(context, '/');
+                },
+                child: Icon(Icons.cancel),
+              ),
+            ]),
         body: Builder(builder: (BuildContext context) {
           return form(context, this._item);
         }));
@@ -62,7 +65,7 @@ class _EditState extends State<Edit> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           input(),
-          BigButton('Submit', () => submit()),
+          BigButton('Submit', () => submit(context)),
         ],
       ),
     );
@@ -129,7 +132,7 @@ class _EditState extends State<Edit> {
   }
 
   /// Submit the current item from the form if its valid
-  void submit() {
+  void submit(BuildContext context) {
     if (!this._formKey.currentState.validate()) return;
     this._formKey.currentState.save();
     final int delay = 2;
