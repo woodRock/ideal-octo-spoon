@@ -119,7 +119,6 @@ class _NewState extends State<New> {
 
   /// Submit the current item from the form if its valid.
   void submit(BuildContext context) {
-    print('I get here!');
     if (!this._formKey.currentState.validate()) return;
     this._formKey.currentState.save();
     final int delay = 2;
